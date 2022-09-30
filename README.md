@@ -18,3 +18,15 @@ npm start
 - React-Icons
 
 ## 폴더 구조
+
+```
+📦src
+┣ 📂Auth
+┃ ┣ 📜Auth.js
+┃ ┗ 📜Auth.scss
+┣ 📂Todo
+┃ ┣ 📜TodoList.js
+┃ ┗ 📜TodoList.scss
+┣ 📜index.js
+┗ 📜Router.js
+```
