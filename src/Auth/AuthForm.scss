@@ -1,0 +1,12 @@
+.AuthForm {
+  padding: 1rem;
+
+  input[type='text'],
+  input[type='password'] {
+    border: none;
+    border-bottom: 1px solid black;
+  }
+  input {
+    margin: 1rem;
+  }
+}
