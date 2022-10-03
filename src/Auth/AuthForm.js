@@ -1,6 +1,6 @@
 import './AuthForm.scss';
 import { useEffect, useState } from 'react';
-import { baseUrl } from '../api';
+import { baseUrl } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 function AuthForm({ authType }) {

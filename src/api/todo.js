@@ -1,4 +1,4 @@
-import { baseUrl } from '../api';
+import { baseUrl } from './api';
 import { request } from '../utils';
 
 export const API = {
@@ -20,7 +20,6 @@ export const API = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      // { todo: String, isCompleted: Boolean }
       body: JSON.stringify(bodyData),
     };
 
