@@ -21,14 +21,27 @@ npm start
 
 ```
 📦src
-┣ 📂Auth
-┃ ┣ 📜Auth.js
-┃ ┗ 📜Auth.scss
-┣ 📂Todo
-┃ ┣ 📜TodoList.js
-┃ ┗ 📜TodoList.scss
-┣ 📜index.js
-┗ 📜Router.js
+ ┣ 📂api
+ ┃ ┣ 📜todo.js
+ ┃ ┗ 📜user.js
+ ┣ 📂Auth
+ ┃ ┣ 📜Auth.js
+ ┃ ┣ 📜Auth.scss
+ ┃ ┣ 📜AuthForm.js
+ ┃ ┗ 📜AuthForm.scss
+ ┣ 📂styles
+ ┃ ┣ 📜common.scss
+ ┃ ┗ 📜reset.scss
+ ┣ 📂Todo
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📜TodoInput.js
+ ┃ ┃ ┣ 📜TodoItem.js
+ ┃ ┃ ┗ 📜TodoItem.scss
+ ┃ ┗ 📜Todo.js
+ ┣ 📜api.js
+ ┣ 📜index.js
+ ┣ 📜Router.js
+ ┗ 📜utils.js
 ```
 
 ### API

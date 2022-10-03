@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './Auth.scss';
 import AuthForm from './AuthForm.js';
 
 function Auth() {
@@ -31,12 +30,3 @@ function Auth() {
 }
 
 export default Auth;
-
-// 요청
-// URL: /auth/signup
-// Method: POST
-// Headers:
-// Content-Type: application/json
-// Body:
-// email: string
-// password: string
