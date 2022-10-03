@@ -1,6 +1,9 @@
 export const request = async (uri, options = {}) => {
   try {
     const response = await fetch(uri, options);
+    if (response.status === 204) {
+      return;
+    }
     if (response.ok) {
       const json = await response.json();
       return json;
