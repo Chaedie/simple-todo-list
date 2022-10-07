@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API } from '../api/todo';
 import TodoInput from './components/TodoInput';
 import TodoItem from './components/TodoItem';
@@ -7,6 +7,7 @@ function Todo() {
   const token = localStorage.getItem('token');
   const [todoInput, setTodoInput] = useState('');
   const [todoList, setTodoList] = useState([]);
+  const todoInputRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +19,9 @@ function Todo() {
 
   const appendTodo = e => {
     e.preventDefault();
+    todoInputRef.current.focus();
+    if (todoInput === '') return;
+
     const fetchData = async () => {
       const data = await API.postTodo(token, { todo: todoInput });
       setTodoList([...todoList, data]);
@@ -35,6 +39,7 @@ function Todo() {
         todoInput={todoInput}
         setTodoInput={setTodoInput}
         appendTodo={appendTodo}
+        todoInputRef={todoInputRef}
       />
       <div className="TodoList">
         {todoList.map(todoItem => {
