@@ -5,7 +5,7 @@ function TodoInput({ todoInput, setTodoInput, appendTodo, todoInputRef }) {
       <br />
       <form onSubmit={appendTodo}>
         <input
-          type="text" 
+          type="text"
           onChange={e => setTodoInput(e.target.value)}
           placeholder="추가할 Todo를 입력해주세요."
           value={todoInput}

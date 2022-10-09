@@ -1,13 +1,6 @@
 import { API } from '../../api/todo';
 
-function TodoUpdate({
-  token,
-  todoList,
-  setTodoList,
-  updateTodoInfo,
-  setUpdateTodoInfo,
-  setIsClickedUpdate,
-}) {
+function TodoUpdate({ token, todoList, setTodoList, updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }) {
   const handleChangeRadio = e => {
     let isCompleted = e.target.value === 'true' ? true : false;
     setUpdateTodoInfo({ ...updateTodoInfo, isCompleted });
@@ -34,26 +27,23 @@ function TodoUpdate({
         <input
           type="text"
           placeholder="할일"
-          onChange={e =>
-            setUpdateTodoInfo({ ...updateTodoInfo, todo: e.target.value })
-          }
+          onChange={e => setUpdateTodoInfo({ ...updateTodoInfo, todo: e.target.value })}
           value={updateTodoInfo.todo}
         />
         <br />
-        <input
-          type="radio"
-          onChange={handleChangeRadio}
-          checked={updateTodoInfo.isCompleted === true}
-          value={true}
-        />
-        <label>완료</label>
-        <input
-          type="radio"
-          onChange={handleChangeRadio}
-          checked={updateTodoInfo.isCompleted === false}
-          value={false}
-        />
-        <label>미완료</label>
+        <label>
+          <input type="radio" onChange={handleChangeRadio} checked={updateTodoInfo.isCompleted === true} value={true} />
+          완료
+        </label>
+        <label>
+          <input
+            type="radio"
+            onChange={handleChangeRadio}
+            checked={updateTodoInfo.isCompleted === false}
+            value={false}
+          />
+          미완료
+        </label>
         <input type="submit" value="수정!!" />
       </form>
     </div>
