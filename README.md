@@ -15,6 +15,8 @@ npm start
 
 ## 데모 영상 or 배포 링크
 
+[👉 배포 링크 👈](https://chaedie.github.io/wanted-pre-onboarding-fe-7/)
+
 ## 사용 라이브러리
 
 - React-router-dom
