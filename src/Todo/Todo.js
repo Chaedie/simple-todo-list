@@ -12,7 +12,6 @@ function Todo() {
 
   const navigate = useNavigate();
 
-  console.log(token);
   useEffect(() => {
     if (token) {
       const fetchData = async () => {
