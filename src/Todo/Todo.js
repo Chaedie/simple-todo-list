@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { API } from '../api/todo';
 import TodoInput from './components/TodoInput';
 import TodoItem from './components/TodoItem';
@@ -9,13 +10,21 @@ function Todo() {
   const [todoList, setTodoList] = useState([]);
   const todoInputRef = useRef();
 
+  const navigate = useNavigate();
+
+  console.log(token);
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await API.getTodoList(token);
-      setTodoList([...data]);
-    };
-    fetchData();
-  }, [token]);
+    if (token) {
+      const fetchData = async () => {
+        const data = await API.getTodoList(token);
+        setTodoList([...data]);
+      };
+      fetchData();
+    }
+    if (token === null) {
+      navigate('/');
+    }
+  }, [token, navigate]);
 
   const appendTodo = e => {
     e.preventDefault();
@@ -43,14 +52,7 @@ function Todo() {
       />
       <div className="TodoList">
         {todoList.map(todoItem => {
-          return (
-            <TodoItem
-              key={todoItem.id}
-              todoList={todoList}
-              setTodoList={setTodoList}
-              todoItem={todoItem}
-            />
-          );
+          return <TodoItem key={todoItem.id} todoList={todoList} setTodoList={setTodoList} todoItem={todoItem} />;
         })}
       </div>
     </div>
