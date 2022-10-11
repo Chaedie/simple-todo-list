@@ -29,10 +29,7 @@ function AuthForm({ authType }) {
   const handleSubmitAuth = e => {
     e.preventDefault();
     const { email, password } = authInputs;
-    const authUrl =
-      authType === 'login'
-        ? `${baseUrl}/auth/signin`
-        : `${baseUrl}/auth/signup`;
+    const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -47,7 +44,7 @@ function AuthForm({ authType }) {
           localStorage.setItem('token', token);
           navigate('/todo');
         } else {
-          alert(data);
+          alert('로그인 정보를 확인해주세요.');
           navigate('/');
         }
       });
@@ -62,15 +59,10 @@ function AuthForm({ authType }) {
 
   return (
     <form className="AuthForm" onSubmit={handleSubmitAuth}>
-      <input
-        type="text"
-        name="email"
-        placeholder="ID"
-        value={authInputs.email}
-        onChange={handleChangeInputs}
-      />
+      <input type="email" name="email" placeholder="ID" value={authInputs.email} onChange={handleChangeInputs} />
       <br />
       <input
+        minLength="8"
         type="password"
         name="password"
         placeholder="Password"
@@ -90,11 +82,7 @@ function AuthForm({ authType }) {
           <br />
         </>
       )}
-      <input
-        type="submit"
-        value={authType}
-        disabled={!isValidInputs[authType]}
-      />
+      <input type="submit" value={authType} disabled={!isValidInputs[authType]} />
     </form>
   );
 }

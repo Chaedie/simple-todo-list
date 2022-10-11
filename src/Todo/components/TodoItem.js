@@ -31,10 +31,8 @@ function TodoItem({ todoItem, todoList, setTodoList }) {
 
   return (
     <div className="TodoItem mg-0_5rem">
-      <span>
-        {todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
-      </span>
-      <span>할일: {todoItem.todo}</span>
+      <span>{todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</span>
+      <span className={todoItem.isCompleted ? 'completed' : ''}>할일: {todoItem.todo}</span>
       <div className="buttons">
         <button onClick={toggleUpdate}>수정</button>
         <button onClick={toggleDelete}>삭제</button>
