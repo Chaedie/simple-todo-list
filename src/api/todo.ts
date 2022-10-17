@@ -1,8 +1,9 @@
 import { baseUrl } from './api';
 import { request } from '../utils';
+import { TodoItem } from '../models/TodoItem';
 
 export const API = {
-  getTodoList: async function (token, bodyData = {}) {
+  getTodoList: async function (token: string | null) {
     const uri = `${baseUrl}/todos`;
     const options = {
       headers: { Authorization: `Bearer ${token}` },
@@ -12,7 +13,7 @@ export const API = {
     return response;
   },
 
-  postTodo: async (token, bodyData = {}) => {
+  postTodo: async (token: string | null, bodyData: { todo: string }) => {
     const uri = `${baseUrl}/todos`;
     const options = {
       method: 'POST',
@@ -27,7 +28,7 @@ export const API = {
     return response;
   },
 
-  putTodo: async (token, bodyData = {}) => {
+  putTodo: async (token: string | null, bodyData: { id: number; todo: string; isCompleted: boolean }) => {
     const uri = `${baseUrl}/todos/${bodyData?.id}`;
     const options = {
       method: 'PUT',
@@ -42,7 +43,7 @@ export const API = {
     return response;
   },
 
-  deleteTodo: async (token, bodyData = {}) => {
+  deleteTodo: async (token: string | null, bodyData: { id: number }) => {
     const uri = `${baseUrl}/todos/${bodyData?.id}`;
     const options = {
       method: 'DELETE',

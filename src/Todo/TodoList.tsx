@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../api/todo';
 import TodoInput from './components/TodoInput';
-import TodoItem from './components/TodoItem';
+import Todo from './components/Todo';
+import { TodoItem } from '../models/TodoItem';
 
-function Todo() {
+function TodoList() {
   const token = localStorage.getItem('token');
   const [todoInput, setTodoInput] = useState('');
-  const [todoList, setTodoList] = useState([]);
-  const todoInputRef = useRef();
+  const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const todoInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -20,14 +21,14 @@ function Todo() {
       };
       fetchData();
     }
-    if (token === null) {
+    if (!token) {
       navigate('/');
     }
   }, [token, navigate]);
 
-  const appendTodo = e => {
+  const appendTodo = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    todoInputRef.current.focus();
+    todoInputRef.current!.focus();
     if (todoInput === '') return;
 
     const fetchData = async () => {
@@ -51,10 +52,10 @@ function Todo() {
       />
       <div className="TodoList">
         {todoList.map(todoItem => {
-          return <TodoItem key={todoItem.id} todoList={todoList} setTodoList={setTodoList} todoItem={todoItem} />;
+          return <Todo key={todoItem.id} todoList={todoList} setTodoList={setTodoList} todoItem={todoItem} />;
         })}
       </div>
     </div>
   );
 }
-export default Todo;
+export default TodoList;

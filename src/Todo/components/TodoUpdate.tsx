@@ -1,12 +1,28 @@
+import { ChangeEvent, FormEvent } from 'react';
 import { API } from '../../api/todo';
+import { TodoItem, TodoItemWithoutUserId } from '../../models/TodoItem';
 
-function TodoUpdate({ token, todoList, setTodoList, updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }) {
-  const handleChangeRadio = e => {
+function TodoUpdate({
+  token,
+  todoList,
+  setTodoList,
+  updateTodoInfo,
+  setUpdateTodoInfo,
+  setIsClickedUpdate,
+}: {
+  token: string | null;
+  todoList: TodoItem[];
+  setTodoList: Function;
+  updateTodoInfo: TodoItemWithoutUserId;
+  setUpdateTodoInfo: Function;
+  setIsClickedUpdate: Function;
+}) {
+  const handleChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {
     let isCompleted = e.target.value === 'true' ? true : false;
     setUpdateTodoInfo({ ...updateTodoInfo, isCompleted });
   };
 
-  const updateTodo = e => {
+  const updateTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fetchData = async () => {
       const data = await API.putTodo(token, {
@@ -14,7 +30,7 @@ function TodoUpdate({ token, todoList, setTodoList, updateTodoInfo, setUpdateTod
         todo: updateTodoInfo.todo,
         isCompleted: updateTodoInfo.isCompleted,
       });
-      const newTodoList = todoList.map(x => (x.id === data.id ? data : x));
+      const newTodoList = todoList.map((x: TodoItem) => (x.id === data.id ? data : x));
       setTodoList([...newTodoList]);
     };
     fetchData();
@@ -32,7 +48,7 @@ function TodoUpdate({ token, todoList, setTodoList, updateTodoInfo, setUpdateTod
         />
         <br />
         <label>
-          <input type="radio" onChange={handleChangeRadio} checked={updateTodoInfo.isCompleted === true} value={true} />
+          <input type="radio" onChange={handleChangeRadio} checked={updateTodoInfo.isCompleted === true} value="true" />
           완료
         </label>
         <label>
@@ -40,7 +56,7 @@ function TodoUpdate({ token, todoList, setTodoList, updateTodoInfo, setUpdateTod
             type="radio"
             onChange={handleChangeRadio}
             checked={updateTodoInfo.isCompleted === false}
-            value={false}
+            value="false"
           />
           미완료
         </label>

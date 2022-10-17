@@ -1,10 +1,19 @@
 import { useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 import { API } from '../../api/todo';
-import './TodoItem.scss';
+import { TodoItem } from '../../models/TodoItem';
+import './Todo.scss';
 import TodoUpdate from './TodoUpdate';
 
-function TodoItem({ todoItem, todoList, setTodoList }) {
+function Todo({
+  todoItem,
+  todoList,
+  setTodoList,
+}: {
+  todoItem: TodoItem;
+  todoList: TodoItem[];
+  setTodoList: Function;
+}) {
   const token = localStorage.getItem('token');
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);
@@ -19,18 +28,21 @@ function TodoItem({ todoItem, todoList, setTodoList }) {
 
   const deleteTodo = () => {
     const fetchData = async () => {
-      await API.deleteTodo(token, {
-        id: todoItem.id,
-      });
-      const newTodoList = todoList.filter(x => x.id !== todoItem.id);
-      setTodoList([...newTodoList]);
+      if (token) {
+        await API.deleteTodo(token, {
+          id: todoItem.id,
+        });
+        const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+        setTodoList([...newTodoList]);
+      }
     };
+
     fetchData();
     setIsClickedDelete(false);
   };
 
   return (
-    <div className="TodoItem mg-0_5rem">
+    <div className="Todo mg-0_5rem">
       <span>{todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</span>
       <span className={todoItem.isCompleted ? 'completed' : ''}>할일: {todoItem.todo}</span>
       <div className="buttons">
@@ -56,4 +68,4 @@ function TodoItem({ todoItem, todoList, setTodoList }) {
   );
 }
 
-export default TodoItem;
+export default Todo;
