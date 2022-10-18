@@ -1,4 +1,16 @@
-function TodoInput({ todoInput, setTodoInput, appendTodo, todoInputRef }) {
+import { FormEventHandler, LegacyRef, MutableRefObject, RefObject } from 'react';
+
+function TodoInput({
+  todoInput,
+  setTodoInput,
+  appendTodo,
+  todoInputRef,
+}: {
+  todoInput: string;
+  setTodoInput: Function;
+  appendTodo: FormEventHandler;
+  todoInputRef: RefObject<HTMLInputElement>;
+}) {
   return (
     <div className="TodoInput">
       <h3>TodoInput: {todoInput}</h3>

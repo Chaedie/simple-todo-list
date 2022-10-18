@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AuthForm from './AuthForm.js';
+import AuthForm from './AuthForm';
 
 function Auth() {
   const [authType, setAuthType] = useState('login');
@@ -11,18 +11,8 @@ function Auth() {
       </header>
       <main className="authContainer">
         <h2>{authType}</h2>
-        <input
-          className="mg-0_5rem"
-          type="button"
-          value="Login!"
-          onClick={() => setAuthType('login')}
-        />
-        <input
-          className="mg-0_5rem"
-          type="button"
-          value="signup!"
-          onClick={() => setAuthType('signup')}
-        />
+        <input className="mg-0_5rem" type="button" value="Login!" onClick={() => setAuthType('login')} />
+        <input className="mg-0_5rem" type="button" value="signup!" onClick={() => setAuthType('signup')} />
         <AuthForm authType={authType} />
       </main>
     </div>

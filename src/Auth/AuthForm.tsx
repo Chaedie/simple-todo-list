@@ -1,9 +1,9 @@
 import './AuthForm.scss';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { baseUrl } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
-function AuthForm({ authType }) {
+function AuthForm({ authType }: { authType: string }) {
   const navigate = useNavigate();
   const [authInputs, setAuthInputs] = useState({
     email: '',
@@ -16,17 +16,19 @@ function AuthForm({ authType }) {
   const isValidPassword = authInputs.password.length >= 8;
   const isSamePassword = authInputs.password === authInputs.passwordAgain;
 
-  const isValidInputs = {
+  const isValidInputs: {
+    [key: string]: boolean;
+  } = {
     login: isValidEmail && isValidPassword,
     signup: isValidEmail && isValidPassword && isSamePassword,
   };
 
-  const handleChangeInputs = e => {
+  const handleChangeInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAuthInputs({ ...authInputs, [name]: value });
   };
 
-  const handleSubmitAuth = e => {
+  const handleSubmitAuth = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const { email, password } = authInputs;
     const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
@@ -43,6 +45,9 @@ function AuthForm({ authType }) {
           token = data.access_token;
           localStorage.setItem('token', token);
           navigate('/todo');
+        } else if (data.statusCode === 400) {
+          alert(data.message);
+          navigate('/');
         } else {
           alert('로그인 정보를 확인해주세요.');
           navigate('/');
@@ -62,7 +67,7 @@ function AuthForm({ authType }) {
       <input type="email" name="email" placeholder="ID" value={authInputs.email} onChange={handleChangeInputs} />
       <br />
       <input
-        minLength="8"
+        minLength={8}
         type="password"
         name="password"
         placeholder="Password"
