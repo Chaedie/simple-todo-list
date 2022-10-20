@@ -1,4 +1,4 @@
-import { FormEventHandler, LegacyRef, MutableRefObject, RefObject } from 'react';
+import { FormEventHandler, RefObject } from 'react';
 
 function TodoInput({
   todoInput,
