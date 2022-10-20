@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
-import { API } from '../../api/todo';
+import { todoAPI } from '../../api/todo';
 import { TodoItem } from '../../models/TodoItem';
 import './Todo.scss';
 import TodoUpdate from './TodoUpdate';
@@ -29,7 +29,7 @@ function Todo({
   const deleteTodo = () => {
     const fetchData = async () => {
       if (token) {
-        await API.deleteTodo(token, {
+        await todoAPI.deleteTodo(token, {
           id: todoItem.id,
         });
         const newTodoList = todoList.filter(x => x.id !== todoItem.id);

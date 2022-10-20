@@ -1,5 +1,5 @@
 import './AuthForm.scss';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { baseUrl } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -34,7 +34,8 @@ function AuthForm({ authType }: { authType: string }) {
     const { email, password } = authInputs;
     const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
 
-    axios.post(authUrl, { email, password }).then((data: any) => {
+    axios.post(authUrl, { email, password }).then(res => {
+      let { data } = res;
       if (data.access_token) {
         token = data?.access_token;
         localStorage.setItem('token', token);

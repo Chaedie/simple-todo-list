@@ -1,58 +1,65 @@
-import { baseUrl } from './api';
-import { request } from '../utils';
-import { TodoItem } from '../models/TodoItem';
+import { http } from './api';
 
-export const API = {
+export const todoAPI = {
   getTodoList: async function (token: string | null) {
-    const uri = `${baseUrl}/todos`;
-    const options = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
-    const response = await request(uri, options);
-    return response;
+    try {
+      const res = await http.get('/todos', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.status === 200) {
+        return res.data;
+      }
+      throw new Error('API통신 실패');
+    } catch (error: any) {
+      console.error(error.message);
+    }
   },
 
   postTodo: async (token: string | null, bodyData: { todo: string }) => {
-    const uri = `${baseUrl}/todos`;
-    const options = {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodyData),
-    };
-
-    const response = await request(uri, options);
-    return response;
+    try {
+      const res = await http.post('/todos', bodyData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.status === 201) {
+        return res.data;
+      }
+      throw new Error('API통신 실패');
+    } catch (error: any) {
+      console.error(error.message);
+    }
   },
 
   putTodo: async (token: string | null, bodyData: { id: number; todo: string; isCompleted: boolean }) => {
-    const uri = `${baseUrl}/todos/${bodyData?.id}`;
-    const options = {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bodyData),
-    };
-
-    const response = await request(uri, options);
-    return response;
+    try {
+      const res = await http.put(`todos/${bodyData?.id}`, bodyData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.status === 200) {
+        return res.data;
+      }
+      throw new Error('API통신 실패');
+    } catch (error: any) {
+      console.error(error.message);
+    }
   },
 
   deleteTodo: async (token: string | null, bodyData: { id: number }) => {
-    const uri = `${baseUrl}/todos/${bodyData?.id}`;
-    const options = {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response = await request(uri, options);
-    return response;
+    try {
+      const res = await http.delete(`/todos/${bodyData?.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.status === 204) {
+        return res.data;
+      }
+      throw new Error('API통신 실패');
+    } catch (error: any) {
+      console.error(error.message);
+    }
   },
 };

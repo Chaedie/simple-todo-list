@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent } from 'react';
-import { API } from '../../api/todo';
+import { todoAPI } from '../../api/todo';
 import { TodoItem, TodoItemWithoutUserId } from '../../models/TodoItem';
 
 function TodoUpdate({
@@ -25,7 +25,7 @@ function TodoUpdate({
   const updateTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fetchData = async () => {
-      const data = await API.putTodo(token, {
+      const data = await todoAPI.putTodo(token, {
         id: updateTodoInfo.id,
         todo: updateTodoInfo.todo,
         isCompleted: updateTodoInfo.isCompleted,

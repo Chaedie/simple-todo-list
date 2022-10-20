@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API } from '../api/todo';
+import { todoAPI } from '../api/todo';
 import TodoInput from './components/TodoInput';
 import Todo from './components/Todo';
 import { TodoItem } from '../models/TodoItem';
@@ -16,12 +16,11 @@ function TodoList() {
   useEffect(() => {
     if (token) {
       const fetchData = async () => {
-        const data = await API.getTodoList(token);
+        const data = await todoAPI.getTodoList(token);
         setTodoList([...data]);
       };
       fetchData();
-    }
-    if (!token) {
+    } else {
       navigate('/');
     }
   }, [token, navigate]);
@@ -32,17 +31,25 @@ function TodoList() {
     if (todoInput === '') return;
 
     const fetchData = async () => {
-      const data = await API.postTodo(token, { todo: todoInput });
+      const data = await todoAPI.postTodo(token, { todo: todoInput });
       setTodoList([...todoList, data]);
     };
     fetchData();
     setTodoInput('');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <div className="TodoList modal">
       <header>
         <h1 className="mg-0_5rem">TodoList</h1>
+        <button className="mg-0_5rem" onClick={handleLogout}>
+          Logout
+        </button>
       </header>
       <TodoInput
         todoInput={todoInput}
