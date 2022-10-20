@@ -1,6 +1,6 @@
-# 원티드 프리온보딩 프론트엔드 - 선발 과제
+# to-do-app
 
-해당 저장소는 "원티드 프리온보딩 프론트엔드 코스" 선발 과제 제출용 저장소입니다.
+간단한 To Do List App 입니다.
 
 ## 프로젝트 실행 법
 
@@ -16,7 +16,7 @@ npm start
 
 ## 데모 영상 or 배포 링크
 
-[👉 배포 링크 👈](https://chaedie.github.io/wanted-pre-onboarding-fe-7/)
+[👉 배포 링크 👈](https://chaedie.github.io/simple-todo-list/)
 
 ## 사용 라이브러리
 
@@ -65,3 +65,7 @@ npm start
 - [@types/to-do-app 에러 해결 과정 (2)](https://velog.io/@im_chaedong/typesto-do-app-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95-2)
 - [@types/to-do-app 에러 해결 과정 (3)](https://velog.io/@im_chaedong/typesto-do-app-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95-3)
 - [@types/to-do-app 에러 해결 과정 (4)](https://velog.io/@im_chaedong/typesto-do-app-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95-4)
+
+### Axios 적용 과정
+
+- [Fetch => Axios 적용 ](https://chaedies-dev-log.tistory.com/entry/Reactjs-to-do-app-fetch-Axios-%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98-%EA%B3%BC%EC%A0%95)
