@@ -4,7 +4,7 @@ import TodoList from './Todo/TodoList';
 
 function Router() {
   return (
-    <BrowserRouter basename="/wanted-pre-onboarding-fe-7">
+    <BrowserRouter basename="/simple-todo-list">
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route path="/todo" element={<TodoList />} />
