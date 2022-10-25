@@ -1,21 +1,20 @@
 import './AuthForm.scss';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { baseUrl } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AuthForm({ authType }: { authType: string }) {
-  const navigate = useNavigate();
-  const [authInputs, setAuthInputs] = useState({
-    email: '',
-    password: '',
-    passwordAgain: '',
-  });
-  let token = null;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
 
-  const isValidEmail = authInputs.email.includes('@');
-  const isValidPassword = authInputs.password.length >= 8;
-  const isSamePassword = authInputs.password === authInputs.passwordAgain;
+  const token = useRef(localStorage.getItem('token'));
+  const navigate = useNavigate();
+
+  const isValidEmail = useMemo(() => email.includes('@'), [email]);
+  const isValidPassword = useMemo(() => password.length >= 8, [password]);
+  const isSamePassword = useMemo(() => password === passwordAgain, [password, passwordAgain]);
 
   const isValidInputs: {
     [key: string]: boolean;
@@ -24,34 +23,28 @@ function AuthForm({ authType }: { authType: string }) {
     signup: isValidEmail && isValidPassword && isSamePassword,
   };
 
-  const handleChangeInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setAuthInputs({ ...authInputs, [name]: value });
-  };
-
-  const handleSubmitAuth = (e: React.SyntheticEvent) => {
+  const handleSubmitAuth = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const { email, password } = authInputs;
     const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
+    const { data } = await axios.post(authUrl, { email, password });
 
-    axios.post(authUrl, { email, password }).then(res => {
-      let { data } = res;
-      if (data.access_token) {
-        token = data?.access_token;
-        localStorage.setItem('token', token);
-        navigate('/todo');
-      } else if (data.statusCode === 400) {
-        alert(data.message);
-        navigate('/');
-      } else {
-        alert('로그인 정보를 확인해주세요.');
-        navigate('/');
-      }
-    });
+    if (data.statusCode === 400) {
+      alert(data.message);
+      navigate('/');
+      return;
+    }
+    if (data.access_token) {
+      token.current = data.access_token;
+      localStorage.setItem('token', token.current!);
+      navigate('/todo');
+      return;
+    }
+    alert('입력 정보를 확인해주세요.');
+    navigate('/');
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (token.current) {
       alert('자동 로그인 되었습니다.');
       navigate('/todo');
     }
@@ -59,15 +52,15 @@ function AuthForm({ authType }: { authType: string }) {
 
   return (
     <form className="AuthForm" onSubmit={handleSubmitAuth}>
-      <input type="email" name="email" placeholder="ID" value={authInputs.email} onChange={handleChangeInputs} />
+      <input type="email" name="email" placeholder="ID" value={email} onChange={e => setEmail(e.target.value)} />
       <br />
       <input
         minLength={8}
         type="password"
         name="password"
         placeholder="Password"
-        value={authInputs.password}
-        onChange={handleChangeInputs}
+        value={password}
+        onChange={e => setPassword(e.target.value)}
       />
       <br />
       {authType === 'signup' && (
@@ -76,8 +69,8 @@ function AuthForm({ authType }: { authType: string }) {
             type="password"
             name="passwordAgain"
             placeholder="Password"
-            value={authInputs.passwordAgain}
-            onChange={handleChangeInputs}
+            value={passwordAgain}
+            onChange={e => setPasswordAgain(e.target.value)}
           />
           <br />
         </>

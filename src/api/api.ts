@@ -7,3 +7,7 @@ export const http = axios.create({
   headers: { 'Content-Type': 'application/json' },
   timeout: 1000,
 });
+
+export function getAuthorization(token: string | null) {
+  return { Authorization: `Bearer ${token}` };
+}

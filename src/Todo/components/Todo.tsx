@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
-import { todoAPI } from '../../api/todo';
+import { deleteTodo } from '../../api/todo';
 import { TodoItem } from '../../models/TodoItem';
 import './Todo.scss';
 import TodoUpdate from './TodoUpdate';
@@ -23,15 +23,12 @@ function Todo({
     isCompleted: todoItem.isCompleted,
   });
 
-  const toggleUpdate = () => setIsClickedUpdate(prev => !prev);
-  const toggleDelete = () => setIsClickedDelete(prev => !prev);
+  const toggleState = (setState: Dispatch<SetStateAction<boolean>>) => setState(prev => !prev);
 
-  const deleteTodo = () => {
+  const handleDeleteTodo = () => {
     const fetchData = async () => {
       if (token) {
-        await todoAPI.deleteTodo(token, {
-          id: todoItem.id,
-        });
+        await deleteTodo(token, { id: todoItem.id });
         const newTodoList = todoList.filter(x => x.id !== todoItem.id);
         setTodoList([...newTodoList]);
       }
@@ -46,8 +43,8 @@ function Todo({
       <span>{todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</span>
       <span className={todoItem.isCompleted ? 'completed' : ''}>할일: {todoItem.todo}</span>
       <div className="buttons">
-        <button onClick={toggleUpdate}>수정</button>
-        <button onClick={toggleDelete}>삭제</button>
+        <button onClick={() => toggleState(setIsClickedUpdate)}>수정</button>
+        <button onClick={() => toggleState(setIsClickedDelete)}>삭제</button>
       </div>
       {isClickedUpdate && (
         <TodoUpdate
@@ -61,7 +58,7 @@ function Todo({
       )}
       {isClickedDelete && (
         <div>
-          <button onClick={deleteTodo}>정말로 삭제하시겠어요?</button>
+          <button onClick={handleDeleteTodo}>정말로 삭제하시겠어요?</button>
         </div>
       )}
     </div>
