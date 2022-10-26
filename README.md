@@ -33,11 +33,7 @@ npm install
 npm start
 ```
 
-# <<<<<<< HEAD
-
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ## 데모 영상 or 배포 링크
 
@@ -82,12 +78,8 @@ npm start
  ┗ 📜utils.ts
 ```
 
-# <<<<<<< HEAD
-
 <br />
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 # 주요 기능
 
@@ -97,15 +89,9 @@ npm start
 
 ### 유효성 검사
 
-<<<<<<< HEAD
-`isValidEmail`, `isValidPassword`, `isSamePassword` 변수를 선언하여 `true | false`가 나오도록 할당
-
-# `isValidInputs`라는 객체를 생성하여 `AuthType(login | signup)`에 따라 유효성 검사 통과 여부 `true | false` 반환
-
 - `isValidEmail`, `isValidPassword`, `isSamePassword` 변수를 선언하여 `true | false`가 나오도록 할당
 
 - `isValidInputs`라는 객체를 생성하여 `AuthType(login | signup)`에 따라 유효성 검사 통과 여부 `true | false` 반환
-  > > > > > > > e223739 (Docs: README.md 수정)
 
 ```typescript
 const isValidEmail = useMemo(() => email.includes('@'), [email]);
@@ -119,8 +105,6 @@ const isValidInputs: {
   signup: isValidEmail && isValidPassword && isSamePassword,
 };
 ```
-
-<<<<<<< HEAD
 
 ### 로그인 / 회원가입 http 통신
 
@@ -147,7 +131,6 @@ const isValidInputs: {
 - `access_token`을 받으면 토큰을 로컬스토리지에 저장하며 `/todo`페이지로 이동
 
 - 혹시 모를 예외 상황엔 얼럿을 띄워주며 로그인 페이지로 리다이렉트
-  > > > > > > > e223739 (Docs: README.md 수정)
 
 ```typescript
 const handleSubmitAuth = async (e: React.SyntheticEvent) => {
@@ -171,18 +154,11 @@ const handleSubmitAuth = async (e: React.SyntheticEvent) => {
 };
 ```
 
-<<<<<<< HEAD
-
-### 자동 로그인
-
-# 로그인 페이지 마운트 시 토큰 값이 있으면 자동 로그인 되었다는 얼럿과 함께 `/todo`페이지로 이동
-
 <br />
 
 ### 자동 로그인
 
 - 로그인 페이지 마운트 시 토큰 값이 있으면 자동 로그인 되었다는 얼럿과 함께 `/todo`페이지로 이동
-  > > > > > > > e223739 (Docs: README.md 수정)
 
 ```typescript
 const token = useRef(localStorage.getItem('token'));
@@ -195,26 +171,16 @@ useEffect(() => {
 }, [navigate]);
 ```
 
-# <<<<<<< HEAD
-
 <br />
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ## To Do CRUD
 
 ### API 공통
 
-<<<<<<< HEAD
-`axios.create()`를 통해 `baseURL`, `headers`, `timeout`와 같은 공통 부분을 미리 할당
-
-# `getAuthorization()`을 통해 `headers` 객체 중복 제거
-
 - `axios.create()`를 통해 `baseURL`, `headers`, `timeout`와 같은 공통 부분을 미리 할당
 
 - `getAuthorization()`을 통해 `headers` 객체 중복 제거
-  > > > > > > > e223739 (Docs: README.md 수정)
 
 ```typescript
 // @ /api/api.ts
@@ -231,24 +197,14 @@ export function getAuthorization(token: string | null) {
 }
 ```
 
-<<<<<<< HEAD
-
 ### Create
 
 `todoInput` state의 값을 body에 담아 `postTodo()`로 http 통신
 
 `try-catch`로 담았으나 `axios.post().then().catch()`와의 차이점은 학습이 필요
 (Promise객체의 catch를 통해서 충분히 에러 핸들링이 가능하다면 굳이 가독성 나쁜 try-catch문을 사용하지 않아도 될것 같습니다.)
-=======
+
 <br />
-
-### Create
-
-- `todoInput` state의 값을 body에 담아 `postTodo()`로 http 통신
-
-- `try-catch`로 담았으나 `axios.post().then().catch()`와의 차이점은 학습이 필요
-  (Promise객체의 catch를 통해서 충분히 에러 핸들링이 가능하다면 굳이 가독성 나쁜 try-catch문을 사용하지 않아도 될것 같습니다.)
-  > > > > > > > e223739 (Docs: README.md 수정)
 
 ```typescript
 // @ /Todo/TodoList.tsx
@@ -280,11 +236,7 @@ export async function postTodo(token: string | null, bodyData: { todo: string })
 }
 ```
 
-# <<<<<<< HEAD
-
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ### Read
 
@@ -315,11 +267,7 @@ export async function getTodoList(token: string | null) {
 }
 ```
 
-# <<<<<<< HEAD
-
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ### Update
 
@@ -350,11 +298,7 @@ export async function putTodo(token: string | null, bodyData: { id: number; todo
 }
 ```
 
-# <<<<<<< HEAD
-
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ### Delete
 
@@ -386,11 +330,7 @@ export async function deleteTodo(token: string | null, bodyData: { id: number })
 }
 ```
 
-# <<<<<<< HEAD
-
 <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 # 개발 일지
 
@@ -407,21 +347,13 @@ export async function deleteTodo(token: string | null, bodyData: { id: number })
 - [@types/to-do-app 에러 해결 과정 (3)](https://velog.io/@im_chaedong/typesto-do-app-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95-3)
 - [@types/to-do-app 에러 해결 과정 (4)](https://velog.io/@im_chaedong/typesto-do-app-%EC%97%90%EB%9F%AC-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95-4)
 
-# <<<<<<< HEAD
-
   <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ## Axios 적용 과정
 
 - [Fetch => Axios 적용 ](https://chaedies-dev-log.tistory.com/entry/Reactjs-to-do-app-fetch-Axios-%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98-%EA%B3%BC%EC%A0%95)
 
-# <<<<<<< HEAD
-
   <br />
-
-> > > > > > > e223739 (Docs: README.md 수정)
 
 ## 향후 로드맵
 
