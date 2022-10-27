@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { putTodo } from '../../api/todo';
-import { TodoItem, TodoItemWithoutUserId } from '../../models/TodoItem';
+import { TodoItem, TodoItemWithUserId } from '../../models/TodoItem';
 
 function TodoUpdate({
   token,
@@ -13,8 +13,8 @@ function TodoUpdate({
   token: string | null;
   todoList: TodoItem[];
   setTodoList: Function;
-  updateTodoInfo: TodoItemWithoutUserId;
-  setUpdateTodoInfo: React.Dispatch<React.SetStateAction<TodoItemWithoutUserId>>;
+  updateTodoInfo: TodoItem;
+  setUpdateTodoInfo: React.Dispatch<React.SetStateAction<TodoItem>>;
   setIsClickedUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const handleChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {

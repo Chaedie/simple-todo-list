@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import TodoInput from './components/TodoInput';
 import Todo from './components/Todo';
-import { TodoItem } from '../models/TodoItem';
+import { TodoItemWithUserId } from '../models/TodoItem';
 import { getTodoList, postTodo } from '../api/todo';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState('');
-  const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const [todoList, setTodoList] = useState<TodoItemWithUserId[]>([]);
 
   const todoInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
