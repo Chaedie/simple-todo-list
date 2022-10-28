@@ -23,7 +23,7 @@ function AuthForm({ authType }: { authType: string }) {
     signup: isValidEmail && isValidPassword && isSamePassword,
   };
 
-  const handleSubmitAuth = async (e: React.SyntheticEvent) => {
+  const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
     const { data } = await axios.post(authUrl, { email, password });

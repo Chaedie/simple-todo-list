@@ -28,7 +28,7 @@ function TodoList() {
   }, [token, navigate]);
 
   const appendTodo = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       todoInputRef.current!.focus();
       if (todoInput === '') return;
