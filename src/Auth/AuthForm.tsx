@@ -1,8 +1,8 @@
 import './AuthForm.scss';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { baseUrl } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { URL } from '../api/api';
 
 function AuthForm({ authType }: { authType: string }) {
   const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ function AuthForm({ authType }: { authType: string }) {
 
   const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
+    const authUrl = authType === 'login' ? URL.LOGIN : URL.SIGNUP;
     const { data } = await axios.post(authUrl, { email, password });
 
     if (data.statusCode === 400) {
@@ -48,7 +48,7 @@ function AuthForm({ authType }: { authType: string }) {
       alert('자동 로그인 되었습니다.');
       navigate('/todo');
     }
-  }, [navigate]);
+  }, [navigate, token]);
 
   return (
     <form className="AuthForm" onSubmit={handleSubmitAuth}>

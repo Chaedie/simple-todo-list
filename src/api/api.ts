@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-export const baseUrl = 'https://pre-onboarding-selection-task.shop';
+const baseURL = process.env.REACT_APP_BASE_URL;
+
+export const URL = {
+  LOGIN: '/auth/signin',
+  SIGNUP: '/auth/signup',
+};
 
 export const http = axios.create({
-  baseURL: baseUrl,
+  baseURL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 1000,
 });
