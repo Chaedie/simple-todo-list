@@ -1,8 +1,8 @@
-import { http, getAuthorization } from './api';
+import { http } from './api';
 
-export async function getTodoList(token: string | null) {
+export async function getTodoList() {
   try {
-    const res = await http.get('/todos', { headers: getAuthorization(token) });
+    const res = await http.get('/todos');
     if (res.status === 200) return res.data;
 
     throw new Error('API통신 실패');
@@ -10,9 +10,9 @@ export async function getTodoList(token: string | null) {
     console.error(error.message);
   }
 }
-export async function postTodo(token: string | null, bodyData: { todo: string }) {
+export async function postTodo(bodyData: { todo: string }) {
   try {
-    const res = await http.post('/todos', bodyData, { headers: getAuthorization(token) });
+    const res = await http.post('/todos', bodyData);
     if (res.status === 201) return res.data;
 
     throw new Error('API통신 실패');
@@ -21,9 +21,9 @@ export async function postTodo(token: string | null, bodyData: { todo: string })
   }
 }
 
-export async function putTodo(token: string | null, bodyData: { id: number; todo: string; isCompleted: boolean }) {
+export async function putTodo(bodyData: { id: number; todo: string; isCompleted: boolean }) {
   try {
-    const res = await http.put(`todos/${bodyData?.id}`, bodyData, { headers: getAuthorization(token) });
+    const res = await http.put(`todos/${bodyData?.id}`, bodyData);
     if (res.status === 200) return res.data;
 
     throw new Error('API통신 실패');
@@ -32,9 +32,9 @@ export async function putTodo(token: string | null, bodyData: { id: number; todo
   }
 }
 
-export async function deleteTodo(token: string | null, bodyData: { id: number }) {
+export async function deleteTodo(bodyData: { id: number }) {
   try {
-    const res = await http.delete(`/todos/${bodyData?.id}`, { headers: getAuthorization(token) });
+    const res = await http.delete(`/todos/${bodyData?.id}`);
     if (res.status === 204) return res.data;
 
     throw new Error('API통신 실패');

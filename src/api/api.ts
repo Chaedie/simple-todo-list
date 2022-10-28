@@ -13,6 +13,10 @@ export const http = axios.create({
   timeout: 1000,
 });
 
-export function getAuthorization(token: string | null) {
-  return { Authorization: `Bearer ${token}` };
-}
+http.interceptors.request.use(req => {
+  if (req.headers) {
+    req.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  }
+
+  return req;
+});

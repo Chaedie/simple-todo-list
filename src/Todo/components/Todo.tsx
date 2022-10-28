@@ -14,7 +14,6 @@ function Todo({
   todoList: TodoItem[];
   setTodoList: Function;
 }) {
-  const token = localStorage.getItem('token');
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);
   const [updateTodoInfo, setUpdateTodoInfo] = useState({
@@ -27,11 +26,9 @@ function Todo({
 
   const handleDeleteTodo = () => {
     const fetchData = async () => {
-      if (token) {
-        await deleteTodo(token, { id: todoItem.id });
-        const newTodoList = todoList.filter(x => x.id !== todoItem.id);
-        setTodoList([...newTodoList]);
-      }
+      await deleteTodo({ id: todoItem.id });
+      const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+      setTodoList([...newTodoList]);
     };
 
     fetchData();
@@ -48,7 +45,6 @@ function Todo({
       </div>
       {isClickedUpdate && (
         <TodoUpdate
-          token={token}
           todoList={todoList}
           setTodoList={setTodoList}
           updateTodoInfo={updateTodoInfo}

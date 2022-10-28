@@ -3,14 +3,12 @@ import { putTodo } from '../../api/todo';
 import { TodoItem } from '../../models/TodoItem';
 
 function TodoUpdate({
-  token,
   todoList,
   setTodoList,
   updateTodoInfo,
   setUpdateTodoInfo,
   setIsClickedUpdate,
 }: {
-  token: string | null;
   todoList: TodoItem[];
   setTodoList: Function;
   updateTodoInfo: TodoItem;
@@ -26,7 +24,7 @@ function TodoUpdate({
     e.preventDefault();
     const fetchData = async () => {
       const { id, todo, isCompleted } = updateTodoInfo;
-      const data = await putTodo(token, { id, todo, isCompleted });
+      const data = await putTodo({ id, todo, isCompleted });
       const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
       setTodoList([...newTodoList]);
     };

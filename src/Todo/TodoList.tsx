@@ -18,7 +18,7 @@ function TodoList() {
   useEffect(() => {
     if (token) {
       const fetchData = async () => {
-        const data = await getTodoList(token);
+        const data = await getTodoList();
         setTodoList([...data]);
       };
       fetchData();
@@ -34,13 +34,13 @@ function TodoList() {
       if (todoInput === '') return;
 
       const fetchData = async () => {
-        const data = await postTodo(token, { todo: todoInput });
+        const data = await postTodo({ todo: todoInput });
         setTodoList(prev => [...prev, data]);
       };
       fetchData();
       setTodoInput('');
     },
-    [todoInputRef, todoInput, token]
+    [todoInputRef, todoInput]
   );
 
   const handleLogout = () => {
