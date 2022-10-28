@@ -30,7 +30,9 @@ function TodoList() {
   const appendTodo = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      todoInputRef.current!.focus();
+      if (todoInputRef.current !== null) {
+        todoInputRef.current.focus();
+      }
       if (todoInput === '') return;
 
       const fetchData = async () => {
