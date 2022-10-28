@@ -106,18 +106,6 @@ const isValidInputs: {
 };
 ```
 
-### 로그인 / 회원가입 http 통신
-
-`authType`에 따라 `authUrl` 할당
-
-`axios.post()` 메서드로 http 통신
-
-`statusCode`가 400이면 해당 에러 메시지를 얼럿띄워주며 로그인페이지로 리다이렉트
-
-`access_token`을 받으면 토큰을 로컬스토리지에 저장하며 `/todo`페이지로 이동
-
-# 혹시 모를 예외 상황엔 얼럿을 띄워주며 로그인 페이지로 리다이렉트
-
 <br />
 
 ### 로그인 / 회원가입 http 통신
@@ -223,6 +211,9 @@ const appendTodo = useCallback(
   },
   [todoInputRef, todoInput, token]
 );
+```
+
+```typescript
 // @ /api/todo.ts
 export async function postTodo(token: string | null, bodyData: { todo: string }) {
   try {
@@ -253,7 +244,9 @@ useEffect(() => {
     navigate('/');
   }
 }, [token, navigate]);
+```
 
+```typescript
 // @ /api/todo.ts
 export async function getTodoList(token: string | null) {
   try {
@@ -284,7 +277,9 @@ const updateTodo = (e: FormEvent<HTMLFormElement>) => {
   fetchData();
   setIsClickedUpdate(false);
 };
+```
 
+```typescript
 // @ /api/todo.ts
 export async function putTodo(token: string | null, bodyData: { id: number; todo: string; isCompleted: boolean }) {
   try {
@@ -316,7 +311,9 @@ const handleDeleteTodo = () => {
   fetchData();
   setIsClickedDelete(false);
 };
+```
 
+```typescript
 // @ /api/todo.ts
 export async function deleteTodo(token: string | null, bodyData: { id: number }) {
   try {
@@ -360,3 +357,5 @@ export async function deleteTodo(token: string | null, bodyData: { id: number })
 - src/Todo 이하의 폴더 구조 변경
 - axios의 interceptor 기능 학습 및 적용
 - Redux 라이브러리 적용
+- useForm Hooks 구현 및 적용
+- useFetch Hooks 연구
