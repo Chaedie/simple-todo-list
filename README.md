@@ -121,9 +121,9 @@ const isValidInputs: {
 - 혹시 모를 예외 상황엔 얼럿을 띄워주며 로그인 페이지로 리다이렉트
 
 ```typescript
-const handleSubmitAuth = async (e: React.SyntheticEvent) => {
+const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  const authUrl = authType === 'login' ? `${baseUrl}/auth/signin` : `${baseUrl}/auth/signup`;
+  const authUrl = authType === 'login' ? URL.LOGIN : URL.SIGNUP;
   const { data } = await axios.post(authUrl, { email, password });
 
   if (data.statusCode === 400) {
@@ -132,8 +132,7 @@ const handleSubmitAuth = async (e: React.SyntheticEvent) => {
     return;
   }
   if (data.access_token) {
-    token.current = data.access_token;
-    localStorage.setItem('token', token.current!);
+    localStorage.setItem('token', data.access_token);
     navigate('/todo');
     return;
   }
@@ -149,10 +148,8 @@ const handleSubmitAuth = async (e: React.SyntheticEvent) => {
 - 로그인 페이지 마운트 시 토큰 값이 있으면 자동 로그인 되었다는 얼럿과 함께 `/todo`페이지로 이동
 
 ```typescript
-const token = useRef(localStorage.getItem('token'));
-
 useEffect(() => {
-  if (token.current) {
+  if (localStorage.getItem('token')) {
     alert('자동 로그인 되었습니다.');
     navigate('/todo');
   }
@@ -166,58 +163,63 @@ useEffect(() => {
 
 ### API 공통
 
-- `axios.create()`를 통해 `baseURL`, `headers`, `timeout`와 같은 공통 부분을 미리 할당
-
-- `getAuthorization()`을 통해 `headers` 객체 중복 제거
+- `axios.create()`를 통해 `baseURL`, `headers`, `timeout`와 같은 공통 부분을 미리 할당, `interceptors` 기능을 통해 `request.headers.Authorization`에 토큰을 가져와서 보내도록 설정
 
 ```typescript
 // @ /api/api.ts
-export const baseUrl = 'https://pre-onboarding-selection-task.shop';
+
+const baseURL = process.env.REACT_APP_BASE_URL;
+
+export const URL = {
+  LOGIN: '/auth/signin',
+  SIGNUP: '/auth/signup',
+};
 
 export const http = axios.create({
-  baseURL: baseUrl,
+  baseURL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 1000,
 });
 
-export function getAuthorization(token: string | null) {
-  return { Authorization: `Bearer ${token}` };
-}
+http.interceptors.request.use(req => {
+  if (req.headers) {
+    req.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  }
+
+  return req;
+});
 ```
 
 ### Create
 
-`todoInput` state의 값을 body에 담아 `postTodo()`로 http 통신
-
-`try-catch`로 담았으나 `axios.post().then().catch()`와의 차이점은 학습이 필요
-(Promise객체의 catch를 통해서 충분히 에러 핸들링이 가능하다면 굳이 가독성 나쁜 try-catch문을 사용하지 않아도 될것 같습니다.)
+- `todoInput` state의 값을 body에 담아 `postTodo()`로 http 통신
 
 <br />
 
 ```typescript
 // @ /Todo/TodoList.tsx
 const appendTodo = useCallback(
-  (e: React.FormEvent<HTMLInputElement>) => {
+  (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     todoInputRef.current!.focus();
     if (todoInput === '') return;
 
     const fetchData = async () => {
-      const data = await postTodo(token, { todo: todoInput });
+      const data = await postTodo({ todo: todoInput });
       setTodoList(prev => [...prev, data]);
     };
     fetchData();
     setTodoInput('');
   },
-  [todoInputRef, todoInput, token]
+  [todoInputRef, todoInput]
 );
 ```
 
 ```typescript
 // @ /api/todo.ts
-export async function postTodo(token: string | null, bodyData: { todo: string }) {
+export async function postTodo(bodyData: { todo: string }) {
   try {
-    const res = await http.post('/todos', bodyData, { headers: getAuthorization(token) });
+    const res = await http.post('/todos', bodyData);
     if (res.status === 201) return res.data;
 
     throw new Error('API통신 실패');
@@ -236,7 +238,7 @@ export async function postTodo(token: string | null, bodyData: { todo: string })
 useEffect(() => {
   if (token) {
     const fetchData = async () => {
-      const data = await getTodoList(token);
+      const data = await getTodoList();
       setTodoList([...data]);
     };
     fetchData();
@@ -248,9 +250,9 @@ useEffect(() => {
 
 ```typescript
 // @ /api/todo.ts
-export async function getTodoList(token: string | null) {
+export async function getTodoList() {
   try {
-    const res = await http.get('/todos', { headers: getAuthorization(token) });
+    const res = await http.get('/todos');
     if (res.status === 200) return res.data;
 
     throw new Error('API통신 실패');
@@ -270,7 +272,7 @@ const updateTodo = (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   const fetchData = async () => {
     const { id, todo, isCompleted } = updateTodoInfo;
-    const data = await putTodo(token, { id, todo, isCompleted });
+    const data = await putTodo({ id, todo, isCompleted });
     const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
     setTodoList([...newTodoList]);
   };
@@ -281,9 +283,9 @@ const updateTodo = (e: FormEvent<HTMLFormElement>) => {
 
 ```typescript
 // @ /api/todo.ts
-export async function putTodo(token: string | null, bodyData: { id: number; todo: string; isCompleted: boolean }) {
+export async function putTodo(bodyData: { id: number; todo: string; isCompleted: boolean }) {
   try {
-    const res = await http.put(`todos/${bodyData?.id}`, bodyData, { headers: getAuthorization(token) });
+    const res = await http.put(`todos/${bodyData?.id}`, bodyData);
     if (res.status === 200) return res.data;
 
     throw new Error('API통신 실패');
@@ -301,11 +303,9 @@ export async function putTodo(token: string | null, bodyData: { id: number; todo
 // @ /Todo/components/Todo.tsx
 const handleDeleteTodo = () => {
   const fetchData = async () => {
-    if (token) {
-      await deleteTodo(token, { id: todoItem.id });
-      const newTodoList = todoList.filter(x => x.id !== todoItem.id);
-      setTodoList([...newTodoList]);
-    }
+    await deleteTodo({ id: todoItem.id });
+    const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+    setTodoList([...newTodoList]);
   };
 
   fetchData();
@@ -315,9 +315,9 @@ const handleDeleteTodo = () => {
 
 ```typescript
 // @ /api/todo.ts
-export async function deleteTodo(token: string | null, bodyData: { id: number }) {
+export async function deleteTodo(bodyData: { id: number }) {
   try {
-    const res = await http.delete(`/todos/${bodyData?.id}`, { headers: getAuthorization(token) });
+    const res = await http.delete(`/todos/${bodyData?.id}`);
     if (res.status === 204) return res.data;
 
     throw new Error('API통신 실패');
@@ -355,7 +355,6 @@ export async function deleteTodo(token: string | null, bodyData: { id: number })
 ## 향후 로드맵
 
 - src/Todo 이하의 폴더 구조 변경
-- axios의 interceptor 기능 학습 및 적용
 - Redux 라이브러리 적용
 - useForm Hooks 구현 및 적용
 - useFetch Hooks 연구
