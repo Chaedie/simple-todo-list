@@ -1,8 +1,9 @@
 import './AuthForm.scss';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { URL } from '../api/api';
+
+import { http, URL } from '../api/api';
+import { postAuth } from '../api/user';
 
 function AuthForm({ authType }: { authType: string }) {
   const [email, setEmail] = useState('');
@@ -25,20 +26,10 @@ function AuthForm({ authType }: { authType: string }) {
   const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const authUrl = authType === 'login' ? URL.LOGIN : URL.SIGNUP;
-    const { data } = await axios.post(authUrl, { email, password });
-
-    if (data.statusCode === 400) {
-      alert(data.message);
-      navigate('/');
-      return;
-    }
-    if (data.access_token) {
-      localStorage.setItem('token', data.access_token);
-      navigate('/todo');
-      return;
-    }
-    alert('입력 정보를 확인해주세요.');
-    navigate('/');
+    const fetchData = async () => {
+      await postAuth(authUrl, { email, password }, navigate);
+    };
+    fetchData();
   };
 
   useEffect(() => {

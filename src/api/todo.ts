@@ -10,6 +10,7 @@ export async function getTodoList() {
     console.error(error.message);
   }
 }
+
 export async function postTodo(bodyData: { todo: string }) {
   try {
     const res = await http.post('/todos', bodyData);
