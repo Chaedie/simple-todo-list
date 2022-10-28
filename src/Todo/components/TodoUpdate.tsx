@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { putTodo } from '../../api/todo';
-import { TodoItem, TodoItemWithUserId } from '../../models/TodoItem';
+import { TodoItem } from '../../models/TodoItem';
 
 function TodoUpdate({
   token,
