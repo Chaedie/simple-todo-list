@@ -9,7 +9,6 @@ function AuthForm({ authType }: { authType: string }) {
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
 
-  const token = useRef(localStorage.getItem('token'));
   const navigate = useNavigate();
 
   const isValidEmail = useMemo(() => email.includes('@'), [email]);
@@ -34,8 +33,7 @@ function AuthForm({ authType }: { authType: string }) {
       return;
     }
     if (data.access_token) {
-      token.current = data.access_token;
-      localStorage.setItem('token', token.current!);
+      localStorage.setItem('token', data.access_token);
       navigate('/todo');
       return;
     }
@@ -44,11 +42,11 @@ function AuthForm({ authType }: { authType: string }) {
   };
 
   useEffect(() => {
-    if (token.current) {
+    if (localStorage.getItem('token')) {
       alert('자동 로그인 되었습니다.');
       navigate('/todo');
     }
-  }, [navigate, token]);
+  }, [navigate]);
 
   return (
     <form className="AuthForm" onSubmit={handleSubmitAuth}>
