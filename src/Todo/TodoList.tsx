@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import TodoService from '../api/TodoService';
 import TodoInput from './components/TodoInput';
 import Todo from './components/Todo';
 import { TodoItemWithUserId } from '../models/TodoItem';
-import { getTodoList, postTodo } from '../api/todo';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState('');
@@ -15,31 +14,31 @@ function TodoList() {
 
   const token = localStorage.getItem('token');
 
+  const getTodoList = useCallback(async () => {
+    const data = await TodoService.get();
+    setTodoList([...data]);
+  }, []);
+
   useEffect(() => {
-    if (token) {
-      const fetchData = async () => {
-        const data = await getTodoList();
-        setTodoList([...data]);
-      };
-      fetchData();
-    } else {
+    getTodoList();
+  }, [getTodoList]);
+
+  useEffect(() => {
+    if (!token) {
       navigate('/');
     }
   }, [token, navigate]);
 
   const appendTodo = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (todoInputRef.current !== null) {
         todoInputRef.current.focus();
       }
       if (todoInput === '') return;
 
-      const fetchData = async () => {
-        const data = await postTodo({ todo: todoInput });
-        setTodoList(prev => [...prev, data]);
-      };
-      fetchData();
+      const data = await TodoService.post({ todo: todoInput });
+      setTodoList(prev => [...prev, data]);
       setTodoInput('');
     },
     [todoInputRef, todoInput]

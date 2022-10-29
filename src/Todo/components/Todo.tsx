@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
-import { deleteTodo } from '../../api/todo';
+import TodoService from '../../api/TodoService';
 import { TodoItem } from '../../models/TodoItem';
 import './Todo.scss';
 import TodoUpdate from './TodoUpdate';
@@ -24,16 +24,13 @@ function Todo({
 
   const toggleState = (setState: Dispatch<SetStateAction<boolean>>) => setState(prev => !prev);
 
-  const handleDeleteTodo = () => {
-    const fetchData = async () => {
-      await deleteTodo({ id: todoItem.id });
-      const newTodoList = todoList.filter(x => x.id !== todoItem.id);
-      setTodoList([...newTodoList]);
-    };
+  const handleDeleteTodo = useCallback(async () => {
+    await TodoService.delete({ id: todoItem.id });
+    const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+    setTodoList([...newTodoList]);
 
-    fetchData();
     setIsClickedDelete(false);
-  };
+  }, [todoItem, todoList, setTodoList]);
 
   return (
     <div className="Todo mg-0_5rem">

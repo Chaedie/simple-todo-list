@@ -1,5 +1,6 @@
-import { ChangeEvent, FormEvent } from 'react';
-import { putTodo } from '../../api/todo';
+import { ChangeEvent, FormEvent, useCallback } from 'react';
+import TodoService from '../../api/TodoService';
+
 import { TodoItem } from '../../models/TodoItem';
 
 function TodoUpdate({
@@ -20,17 +21,15 @@ function TodoUpdate({
     setUpdateTodoInfo(prev => ({ ...prev, isCompleted }));
   };
 
-  const updateTodo = (e: FormEvent<HTMLFormElement>) => {
+  const updateTodo = useCallback(async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fetchData = async () => {
-      const { id, todo, isCompleted } = updateTodoInfo;
-      const data = await putTodo({ id, todo, isCompleted });
-      const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
-      setTodoList([...newTodoList]);
-    };
-    fetchData();
+    const { id, todo, isCompleted } = updateTodoInfo;
+    const data = await TodoService.put({ id, todo, isCompleted });
+    const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
+
+    setTodoList([...newTodoList]);
     setIsClickedUpdate(false);
-  };
+  }, []);
 
   return (
     <div className="mg-0_5rem updateContainer">
