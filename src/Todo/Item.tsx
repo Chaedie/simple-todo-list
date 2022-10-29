@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
-import TodoService from '../../api/TodoService';
-import { TodoItem } from '../../models/TodoItem';
+import TodoService from '../api/TodoService';
+import { TodoItem } from '../models/TodoItem';
 import './Todo.scss';
 import TodoUpdate from './TodoUpdate';
 
-function Todo({
+function Item({
   todoItem,
   todoList,
   setTodoList,
@@ -58,4 +58,4 @@ function Todo({
   );
 }
 
-export default Todo;
+export default Item;

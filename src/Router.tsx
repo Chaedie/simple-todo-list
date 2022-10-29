@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Auth from './Auth/Auth';
-import TodoList from './Todo/TodoList';
+import TodoStore from './Todo/TodoStore';
 
 function Router() {
   return (
     <BrowserRouter basename="/simple-todo-list">
       <Routes>
         <Route path="/" element={<Auth />} />
-        <Route path="/todo" element={<TodoList />} />
+        <Route path="/todo" element={<TodoStore />} />
       </Routes>
     </BrowserRouter>
   );
