@@ -6,6 +6,13 @@ import { TodoItem } from '../models/TodoItem';
 import useRedirectToMain from '../hooks/useRedirectToMain';
 import TodoList from './TodoList';
 
+export const TodoContext = React.createContext<{
+  todoList: TodoItem[];
+  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
+  todoInput: string;
+  setTodoInput: React.Dispatch<React.SetStateAction<string>>;
+} | null>(null);
+
 function TodoStore() {
   const [todoInput, setTodoInput] = useState('');
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
@@ -47,21 +54,18 @@ function TodoStore() {
   };
 
   return (
-    <div className="TodoList modal">
-      <header>
-        <h1 className="mg-0_5rem">TodoList</h1>
-        <button className="mg-0_5rem" onClick={handleLogout}>
-          Logout
-        </button>
-      </header>
-      <TodoInput
-        todoInput={todoInput}
-        setTodoInput={setTodoInput}
-        appendTodo={appendTodo}
-        todoInputRef={todoInputRef}
-      />
-      <TodoList todoList={todoList} setTodoList={setTodoList} />
-    </div>
+    <TodoContext.Provider value={{ todoList, setTodoList, todoInput, setTodoInput }}>
+      <div className="TodoList modal">
+        <header>
+          <h1 className="mg-0_5rem">TodoList</h1>
+          <button className="mg-0_5rem" onClick={handleLogout}>
+            Logout
+          </button>
+        </header>
+        <TodoInput appendTodo={appendTodo} todoInputRef={todoInputRef} />
+        <TodoList />
+      </div>
+    </TodoContext.Provider>
   );
 }
 export default TodoStore;

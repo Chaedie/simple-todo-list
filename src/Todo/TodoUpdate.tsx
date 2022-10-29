@@ -1,21 +1,19 @@
-import { ChangeEvent, FormEvent, useCallback } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useContext } from 'react';
 import TodoService from '../api/TodoService';
 
 import { TodoItem } from '../models/TodoItem';
+import { TodoContext } from './TodoStore';
 
 function TodoUpdate({
-  todoList,
-  setTodoList,
   updateTodoInfo,
   setUpdateTodoInfo,
   setIsClickedUpdate,
 }: {
-  todoList: TodoItem[];
-  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
   updateTodoInfo: TodoItem;
   setUpdateTodoInfo: React.Dispatch<React.SetStateAction<TodoItem>>;
   setIsClickedUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const { todoList, setTodoList } = useContext(TodoContext)!;
   const handleChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {
     const isCompleted = e.target.value === 'true' ? true : false;
     setUpdateTodoInfo(prev => ({ ...prev, isCompleted }));

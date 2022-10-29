@@ -1,28 +1,18 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 import TodoService from '../api/TodoService';
 import { TodoItem } from '../models/TodoItem';
+import { toggleState } from '../utils/utils';
 import './Todo.scss';
+import { TodoContext } from './TodoStore';
 import TodoUpdate from './TodoUpdate';
 
-function Item({
-  todoItem,
-  todoList,
-  setTodoList,
-}: {
-  todoItem: TodoItem;
-  todoList: TodoItem[];
-  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
-}) {
+function Item({ todoItem }: { todoItem: TodoItem }) {
+  const { todoList, setTodoList } = useContext(TodoContext)!;
+  const { id, todo, isCompleted } = todoItem;
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);
-  const [updateTodoInfo, setUpdateTodoInfo] = useState({
-    id: todoItem.id,
-    todo: todoItem.todo,
-    isCompleted: todoItem.isCompleted,
-  });
-
-  const toggleState = (setState: Dispatch<SetStateAction<boolean>>) => setState(prev => !prev);
+  const [updateTodoInfo, setUpdateTodoInfo] = useState({ id, todo, isCompleted });
 
   const handleDeleteTodo = useCallback(async () => {
     await TodoService.delete({ id: todoItem.id });
@@ -42,8 +32,6 @@ function Item({
       </div>
       {isClickedUpdate && (
         <TodoUpdate
-          todoList={todoList}
-          setTodoList={setTodoList}
           updateTodoInfo={updateTodoInfo}
           setUpdateTodoInfo={setUpdateTodoInfo}
           setIsClickedUpdate={setIsClickedUpdate}

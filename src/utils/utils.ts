@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export const request = async (uri: string, options = {}) => {
   try {
     const response = await fetch(uri, options);
@@ -15,3 +17,5 @@ export const request = async (uri: string, options = {}) => {
 };
 
 export {};
+
+export const toggleState = (setState: Dispatch<SetStateAction<boolean>>) => setState(prev => !prev);
