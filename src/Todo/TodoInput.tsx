@@ -7,7 +7,7 @@ function TodoInput({
   todoInputRef,
 }: {
   todoInput: string;
-  setTodoInput: Function;
+  setTodoInput: React.Dispatch<React.SetStateAction<string>>;
   appendTodo: FormEventHandler;
   todoInputRef: RefObject<HTMLInputElement>;
 }) {

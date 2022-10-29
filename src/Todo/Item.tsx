@@ -12,7 +12,7 @@ function Item({
 }: {
   todoItem: TodoItem;
   todoList: TodoItem[];
-  setTodoList: Function;
+  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
 }) {
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);

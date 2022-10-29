@@ -11,7 +11,7 @@ function TodoUpdate({
   setIsClickedUpdate,
 }: {
   todoList: TodoItem[];
-  setTodoList: Function;
+  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
   updateTodoInfo: TodoItem;
   setUpdateTodoInfo: React.Dispatch<React.SetStateAction<TodoItem>>;
   setIsClickedUpdate: React.Dispatch<React.SetStateAction<boolean>>;
