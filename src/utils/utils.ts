@@ -13,3 +13,5 @@ export const request = async (uri: string, options = {}) => {
     console.error('API통신 실패 :' + error.message);
   }
 };
+
+export {};
