@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
-export const URL = {
+export const URLS = {
   LOGIN: '/auth/signin',
   SIGNUP: '/auth/signup',
 };
