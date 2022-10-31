@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 function useForm(isLoginPage: boolean) {
   const [inputs, setInputs] = useState({
@@ -14,14 +14,14 @@ function useForm(isLoginPage: boolean) {
 
   const { email, password, passwordConfirm } = inputs;
 
-  const isValid = useMemo(() => {
+  const isValid = () => {
     const isValidLogin = email.includes('@') && password.length >= 8;
     const isValidSignin = isValidLogin && password === passwordConfirm;
 
     return isLoginPage ? isValidLogin : isValidSignin;
-  }, [email, password, passwordConfirm, isLoginPage]);
+  };
 
-  return { inputs, handleChangeInputs, isValid };
+  return { inputs, handleChangeInputs, isValid: isValid() };
 }
 
 export default useForm;
