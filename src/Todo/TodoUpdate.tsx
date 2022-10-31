@@ -4,15 +4,13 @@ import TodoService from '../api/TodoService';
 import { TodoItem } from '../models/TodoItem';
 import { TodoContext } from './TodoStore';
 
-function TodoUpdate({
-  updateTodoInfo,
-  setUpdateTodoInfo,
-  setIsClickedUpdate,
-}: {
+interface Props {
   updateTodoInfo: TodoItem;
   setUpdateTodoInfo: React.Dispatch<React.SetStateAction<TodoItem>>;
   setIsClickedUpdate: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}
+
+function TodoUpdate({ updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }: Props) {
   const { todoList, setTodoList } = useContext(TodoContext)!;
   const handleChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {
     const isCompleted = e.target.value === 'true' ? true : false;

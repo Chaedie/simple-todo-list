@@ -6,12 +6,21 @@ import { TodoItem } from '../models/TodoItem';
 import useRedirectToMain from '../hooks/useRedirectToMain';
 import TodoList from './TodoList';
 
-export const TodoContext = React.createContext<{
+interface TodoContextInterface {
   todoList: TodoItem[];
   setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
   todoInput: string;
   setTodoInput: React.Dispatch<React.SetStateAction<string>>;
-} | null>(null);
+}
+
+const initValues = {
+  todoList: [],
+  setTodoList: () => {},
+  todoInput: '',
+  setTodoInput: () => {},
+};
+
+export const TodoContext = React.createContext<TodoContextInterface>(initValues);
 
 function TodoStore() {
   const [todoInput, setTodoInput] = useState('');

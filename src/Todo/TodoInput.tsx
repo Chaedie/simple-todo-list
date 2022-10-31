@@ -1,13 +1,12 @@
 import { FormEventHandler, RefObject, useContext } from 'react';
 import { TodoContext } from './TodoStore';
 
-function TodoInput({
-  appendTodo,
-  todoInputRef,
-}: {
+interface Props {
   appendTodo: FormEventHandler;
   todoInputRef: RefObject<HTMLInputElement>;
-}) {
+}
+
+function TodoInput({ appendTodo, todoInputRef }: Props) {
   const { todoInput, setTodoInput } = useContext(TodoContext)!;
 
   return (

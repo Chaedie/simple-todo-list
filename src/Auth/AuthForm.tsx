@@ -4,7 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { URLS } from '../api/api';
 import { postAuth } from '../api/user';
 
-function AuthForm({ isLoginPage }: { isLoginPage: boolean }) {
+interface Props {
+  isLoginPage: boolean;
+}
+
+function AuthForm({ isLoginPage }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');

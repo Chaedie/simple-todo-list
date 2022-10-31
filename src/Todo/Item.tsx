@@ -7,7 +7,11 @@ import './Todo.scss';
 import { TodoContext } from './TodoStore';
 import TodoUpdate from './TodoUpdate';
 
-function Item({ todoItem }: { todoItem: TodoItem }) {
+interface Props {
+  todoItem: TodoItem;
+}
+
+function Item({ todoItem }: Props) {
   const { todoList, setTodoList } = useContext(TodoContext)!;
   const { id, todo, isCompleted } = todoItem;
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
