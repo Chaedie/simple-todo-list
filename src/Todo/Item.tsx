@@ -12,40 +12,29 @@ interface Props {
 }
 
 function Item({ todoItem }: Props) {
-  const { todoList, setTodoList } = useContext(TodoContext)!;
+  const { todoList, setTodoList } = useContext(TodoContext);
   const { id, todo, isCompleted } = todoItem;
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);
-  const [updateTodoInfo, setUpdateTodoInfo] = useState({
-    id,
-    todo,
-    isCompleted,
-  });
 
   const handleDeleteTodo = useCallback(async () => {
-    await TodoService.delete({ id: todoItem.id });
-    const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+    await TodoService.delete({ id });
+    const newTodoList = todoList.filter(x => x.id !== id);
     setTodoList([...newTodoList]);
-
     setIsClickedDelete(false);
-  }, [todoItem, todoList, setTodoList]);
+  }, [id, todoList, setTodoList]);
 
   return (
     <div className="Todo mg-0_5rem">
-      <span>
-        {todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
-      </span>
-      <span className={todoItem.isCompleted ? 'completed' : ''}>
-        할일: {todoItem.todo}
-      </span>
+      <span>{isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</span>
+      <span className={isCompleted ? 'completed' : ''}>할일: {todo}</span>
       <div className="buttons">
         <button onClick={() => toggleState(setIsClickedUpdate)}>수정</button>
         <button onClick={() => toggleState(setIsClickedDelete)}>삭제</button>
       </div>
       {isClickedUpdate && (
         <TodoUpdate
-          updateTodoInfo={updateTodoInfo}
-          setUpdateTodoInfo={setUpdateTodoInfo}
+          todoItem={todoItem}
           setIsClickedUpdate={setIsClickedUpdate}
         />
       )}
