@@ -1,13 +1,25 @@
-import { FormEventHandler, RefObject, useContext } from 'react';
+import { useCallback, useContext, useRef } from 'react';
+import TodoService from '../api/TodoService';
 import { TodoContext } from './TodoStore';
 
-interface Props {
-  appendTodo: FormEventHandler;
-  todoInputRef: RefObject<HTMLInputElement>;
-}
+function TodoInput() {
+  const { todoInput, setTodoInput, setTodoList } = useContext(TodoContext)!;
+  const todoInputRef = useRef<HTMLInputElement>(null);
 
-function TodoInput({ appendTodo, todoInputRef }: Props) {
-  const { todoInput, setTodoInput } = useContext(TodoContext)!;
+  const appendTodo = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (todoInputRef.current !== null) {
+        todoInputRef.current.focus();
+      }
+      if (todoInput === '') return;
+
+      const data = await TodoService.post({ todo: todoInput });
+      setTodoList(prev => [...prev, data]);
+      setTodoInput('');
+    },
+    [todoInputRef, todoInput, setTodoInput, setTodoList]
+  );
 
   return (
     <div className="TodoInput">

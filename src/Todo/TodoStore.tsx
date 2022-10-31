@@ -14,6 +14,8 @@ interface TodoContextInterface {
   setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
   todoInput: string;
   setTodoInput: React.Dispatch<React.SetStateAction<string>>;
+  isLoading: boolean;
+  errors: boolean;
 }
 
 const initValues = {
@@ -21,6 +23,8 @@ const initValues = {
   setTodoList: () => {},
   todoInput: '',
   setTodoInput: () => {},
+  isLoading: false,
+  errors: false,
 };
 
 export const TodoContext =
@@ -31,24 +35,8 @@ function TodoStore() {
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
   const { isLoading, errors } = useFetch(setTodoList, TodoService.get);
 
-  const todoInputRef = useRef<HTMLInputElement>(null);
 
   const token = localStorage.getItem('token');
-
-  const appendTodo = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (todoInputRef.current !== null) {
-        todoInputRef.current.focus();
-      }
-      if (todoInput === '') return;
-
-      const data = await TodoService.post({ todo: todoInput });
-      setTodoList(prev => [...prev, data]);
-      setTodoInput('');
-    },
-    [todoInputRef, todoInput]
-  );
   useRedirectToMain(token);
 
   if (errors) {
@@ -62,7 +50,7 @@ function TodoStore() {
       <div className="TodoList modal">
         <Header />
 
-        <TodoInput appendTodo={appendTodo} todoInputRef={todoInputRef} />
+        <TodoInput />
 
         {isLoading ? <Loading /> : <TodoList />}
       </div>
