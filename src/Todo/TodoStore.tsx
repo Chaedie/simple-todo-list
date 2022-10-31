@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TodoService from '../api/TodoService';
 import TodoInput from './TodoInput';
@@ -7,6 +7,7 @@ import useRedirectToMain from '../hooks/useRedirectToMain';
 import TodoList from './TodoList';
 import Header from '../components/Header';
 import Error from '../components/Error';
+import useFetch from '../hooks/useFetch';
 import Loading from '../components/Loading';
 
 interface TodoContextInterface {
@@ -23,26 +24,18 @@ const initValues = {
   setTodoInput: () => {},
 };
 
-export const TodoContext = React.createContext<TodoContextInterface>(initValues);
+export const TodoContext =
+  React.createContext<TodoContextInterface>(initValues);
 
 function TodoStore() {
   const [todoInput, setTodoInput] = useState('');
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
+  const { isLoading, errors } = useFetch(setTodoList, TodoService.get);
 
   const todoInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
-
-  const getTodoList = useCallback(async () => {
-    const data = await TodoService.get();
-    setTodoList([...data]);
-  }, []);
-
-  useEffect(() => {
-    getTodoList();
-  }, [getTodoList]);
-
   useRedirectToMain(token, navigate);
 
   const appendTodo = useCallback(
@@ -60,23 +53,15 @@ function TodoStore() {
     [todoInputRef, todoInput]
   );
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
   if (errors) {
     return <Error />;
   }
 
   return (
-    <TodoContext.Provider value={{ todoList, setTodoList, todoInput, setTodoInput }}>
+    <TodoContext.Provider
+      value={{ todoList, setTodoList, todoInput, setTodoInput }}
+    >
       <div className="TodoList modal">
-        <header>
-          <h1 className="mg-0_5rem">TodoList</h1>
-          <button className="mg-0_5rem" onClick={handleLogout}>
-            Logout
-          </button>
-        </header>
         <Header />
 
         <TodoInput appendTodo={appendTodo} todoInputRef={todoInputRef} />

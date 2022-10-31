@@ -96,7 +96,10 @@ npm start
 ```typescript
 const isValidEmail = useMemo(() => email.includes('@'), [email]);
 const isValidPassword = useMemo(() => password.length >= 8, [password]);
-const isSamePassword = useMemo(() => password === passwordAgain, [password, passwordAgain]);
+const isSamePassword = useMemo(
+  () => password === passwordAgain,
+  [password, passwordAgain]
+);
 
 const isValidInputs: {
   [key: string]: boolean;
@@ -125,7 +128,11 @@ const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
 ```
 
 ```typescript
-export async function postAuth(authUrl: string, { email, password }: authInputs, navigate: Function) {
+export async function postAuth(
+  authUrl: string,
+  { email, password }: authInputs,
+  navigate: Function
+) {
   try {
     const res = await http.post(authUrl, { email, password });
     if (res.data.access_token) {
@@ -237,18 +244,44 @@ post: async function (bodyData: { todo: string }) {
 
 ### Read
 
+- `useFetch` 커스텀 훅을 이용하여 get Method 호출
+
 ```typescript
 // @ /Todo/TodoStore.tsx
-const getTodoList = useCallback(async () => {
-  const data = await TodoService.get();
-  setTodoList([...data]);
-}, []);
-
-useEffect(() => {
-  getTodoList();
-}, [getTodoList]);
+const { isLoading, errors } = useFetch(setTodoList, TodoService.get);
 
 useRedirectToMain(token, navigate);
+```
+
+```typescript
+// @/hooks/useFetch.ts
+const useFetch = (
+  setState: Dispatch<SetStateAction<any>>,
+  apiCallback: Function
+) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState(false);
+
+  const handleFetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await apiCallback();
+      setState(data);
+    } catch (error) {
+      setErrors(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setState, apiCallback]);
+
+  useEffect(() => {
+    handleFetch();
+  }, [handleFetch]);
+
+  return { isLoading, errors };
+};
+
+export default useFetch;
 ```
 
 ```typescript
@@ -276,7 +309,9 @@ const updateTodo = useCallback(
     e.preventDefault();
     const { id, todo, isCompleted } = updateTodoInfo;
     const data = await TodoService.put({ id, todo, isCompleted });
-    const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
+    const newTodoList = todoList.map((todoItem: TodoItem) =>
+      todoItem.id === data.id ? data : todoItem
+    );
 
     setTodoList([...newTodoList]);
     setIsClickedUpdate(false);
