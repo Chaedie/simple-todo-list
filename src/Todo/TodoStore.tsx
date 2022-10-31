@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import TodoService from '../api/TodoService';
 import TodoInput from './TodoInput';
 import { TodoItem } from '../models/TodoItem';
@@ -33,10 +32,8 @@ function TodoStore() {
   const { isLoading, errors } = useFetch(setTodoList, TodoService.get);
 
   const todoInputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
-  useRedirectToMain(token, navigate);
 
   const appendTodo = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,6 +49,7 @@ function TodoStore() {
     },
     [todoInputRef, todoInput]
   );
+  useRedirectToMain(token);
 
   if (errors) {
     return <Error />;

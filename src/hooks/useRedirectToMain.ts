@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
-import { NavigateFunction } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function useRedirectToMain(token: string | null, navigate: NavigateFunction) {
+function useRedirectToMain(token: string | null) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!token) {
       navigate('/');
