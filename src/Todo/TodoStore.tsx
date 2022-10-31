@@ -1,41 +1,38 @@
-import React, { useCallback, useRef, useState } from 'react';
-import TodoService from '../api/TodoService';
+import { PropsWithChildren, useContext, useState } from 'react';
 import TodoInput from './TodoInput';
-import { TodoItem } from '../models/TodoItem';
 import useRedirectToMain from '../hooks/useRedirectToMain';
 import TodoList from './TodoList';
 import Header from '../components/Header';
 import Error from '../components/Error';
-import useFetch from '../hooks/useFetch';
 import Loading from '../components/Loading';
+import { TodoContext } from '../contexts/TodoContext';
+import { TodoItem } from '../models/TodoItem';
+import useFetch from '../hooks/useFetch';
+import TodoService from '../api/TodoService';
 
-interface TodoContextInterface {
-  todoList: TodoItem[];
-  setTodoList: React.Dispatch<React.SetStateAction<TodoItem[]>>;
-  todoInput: string;
-  setTodoInput: React.Dispatch<React.SetStateAction<string>>;
-  isLoading: boolean;
-  errors: boolean;
-}
-
-const initValues = {
-  todoList: [],
-  setTodoList: () => {},
-  todoInput: '',
-  setTodoInput: () => {},
-  isLoading: false,
-  errors: false,
-};
-
-export const TodoContext =
-  React.createContext<TodoContextInterface>(initValues);
-
-function TodoStore() {
+function TodoProvider({ children }: PropsWithChildren) {
   const [todoInput, setTodoInput] = useState('');
   const [todoList, setTodoList] = useState<TodoItem[]>([]);
   const { isLoading, errors } = useFetch(setTodoList, TodoService.get);
 
+  return (
+    <TodoContext.Provider
+      value={{
+        todoList,
+        setTodoList,
+        todoInput,
+        setTodoInput,
+        isLoading,
+        errors,
+      }}
+    >
+      {children}
+    </TodoContext.Provider>
+  );
+}
 
+function TodoStore() {
+  const { isLoading, errors } = useContext(TodoContext);
   const token = localStorage.getItem('token');
   useRedirectToMain(token);
 
@@ -44,9 +41,7 @@ function TodoStore() {
   }
 
   return (
-    <TodoContext.Provider
-      value={{ todoList, setTodoList, todoInput, setTodoInput }}
-    >
+    <TodoProvider>
       <div className="TodoList modal">
         <Header />
 
@@ -54,7 +49,7 @@ function TodoStore() {
 
         {isLoading ? <Loading /> : <TodoList />}
       </div>
-    </TodoContext.Provider>
+    </TodoProvider>
   );
 }
 export default TodoStore;

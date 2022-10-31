@@ -1,9 +1,9 @@
 import { useCallback, useContext, useRef } from 'react';
 import TodoService from '../api/TodoService';
-import { TodoContext } from './TodoStore';
+import { TodoContext } from '../contexts/TodoContext';
 
 function TodoInput() {
-  const { todoInput, setTodoInput, setTodoList } = useContext(TodoContext)!;
+  const { todoInput, setTodoInput, setTodoList } = useContext(TodoContext);
   const todoInputRef = useRef<HTMLInputElement>(null);
 
   const appendTodo = useCallback(

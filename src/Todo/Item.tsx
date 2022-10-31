@@ -1,10 +1,10 @@
 import { useCallback, useContext, useState } from 'react';
 import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
 import TodoService from '../api/TodoService';
+import { TodoContext } from '../contexts/TodoContext';
 import { TodoItem } from '../models/TodoItem';
 import { toggleState } from '../utils/utils';
 import './Todo.scss';
-import { TodoContext } from './TodoStore';
 import TodoUpdate from './TodoUpdate';
 
 interface Props {
