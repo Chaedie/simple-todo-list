@@ -58,7 +58,6 @@ npm start
  ┃ ┣ 📜AuthForm.scss
  ┃ ┗ 📜AuthForm.tsx
  ┣ 📂Todo
- ┃ ┣ 📜Item.tsx
  ┃ ┣ 📜Todo.scss
  ┃ ┣ 📜TodoInput.tsx
  ┃ ┣ 📜TodoList.tsx
@@ -72,8 +71,12 @@ npm start
  ┃ ┣ 📜Error.tsx
  ┃ ┣ 📜Header.tsx
  ┃ ┗ 📜Loading.tsx
+ ┣ 📂contexts
+ ┃ ┗ 📜TodoContext.ts
  ┣ 📂hooks
+ ┃ ┣ 📜useAutoLogin.ts
  ┃ ┣ 📜useFetch.ts
+ ┃ ┣ 📜useForm.ts
  ┃ ┗ 📜useRedirectToMain.ts
  ┣ 📂models
  ┃ ┗ 📜TodoItem.ts
@@ -95,24 +98,34 @@ npm start
 
 ### 유효성 검사
 
-- `isValidEmail`, `isValidPassword`, `isSamePassword` 변수를 선언하여 `true | false`가 나오도록 할당
-
-- `isValidInputs`라는 객체를 생성하여 `AuthType(login | signup)`에 따라 유효성 검사 통과 여부 `true | false` 반환
+- `useForm` 커스텀 훅 내부에 isValid라는 함수 생성하여 return 객체에 호출값을 넣어줌
 
 ```typescript
-const isValidEmail = useMemo(() => email.includes('@'), [email]);
-const isValidPassword = useMemo(() => password.length >= 8, [password]);
-const isSamePassword = useMemo(
-  () => password === passwordAgain,
-  [password, passwordAgain]
-);
+import { ChangeEvent, useState } from 'react';
 
-const isValidInputs: {
-  [key: string]: boolean;
-} = {
-  login: isValidEmail && isValidPassword,
-  signup: isValidEmail && isValidPassword && isSamePassword,
-};
+function useForm(isLoginPage: boolean) {
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const handleChangeInputs = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setInputs(prev => ({ ...prev, [name]: value }));
+  };
+
+  const { email, password, passwordConfirm } = inputs;
+
+  const isValid = () => {
+    const isValidLogin = email.includes('@') && password.length >= 8;
+    const isValidSignin = isValidLogin && password === passwordConfirm;
+
+    return isLoginPage ? isValidLogin : isValidSignin;
+  };
+
+  return { inputs, handleChangeInputs, isValid: isValid() };
+}
 ```
 
 <br />
