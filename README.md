@@ -68,16 +68,22 @@ npm start
  ┃ ┣ 📜TodoService.ts
  ┃ ┣ 📜api.ts
  ┃ ┗ 📜user.ts
+ ┣ 📂components
+ ┃ ┣ 📜Error.tsx
+ ┃ ┣ 📜Header.tsx
+ ┃ ┗ 📜Loading.tsx
  ┣ 📂hooks
+ ┃ ┣ 📜useFetch.ts
  ┃ ┗ 📜useRedirectToMain.ts
  ┣ 📂models
  ┃ ┗ 📜TodoItem.ts
  ┣ 📂styles
  ┃ ┣ 📜common.scss
  ┃ ┗ 📜reset.scss
+ ┣ 📂utils
+ ┃ ┗ 📜utils.ts
  ┣ 📜Router.tsx
- ┣ 📜index.tsx
- ┗ 📜utils.ts
+ ┗ 📜index.tsx
 ```
 
 <br />
