@@ -5,6 +5,9 @@ import TodoInput from './TodoInput';
 import { TodoItem } from '../models/TodoItem';
 import useRedirectToMain from '../hooks/useRedirectToMain';
 import TodoList from './TodoList';
+import Header from '../components/Header';
+import Error from '../components/Error';
+import Loading from '../components/Loading';
 
 interface TodoContextInterface {
   todoList: TodoItem[];
@@ -61,6 +64,9 @@ function TodoStore() {
     localStorage.removeItem('token');
     navigate('/');
   };
+  if (errors) {
+    return <Error />;
+  }
 
   return (
     <TodoContext.Provider value={{ todoList, setTodoList, todoInput, setTodoInput }}>
@@ -71,8 +77,11 @@ function TodoStore() {
             Logout
           </button>
         </header>
+        <Header />
+
         <TodoInput appendTodo={appendTodo} todoInputRef={todoInputRef} />
-        <TodoList />
+
+        {isLoading ? <Loading /> : <TodoList />}
       </div>
     </TodoContext.Provider>
   );
