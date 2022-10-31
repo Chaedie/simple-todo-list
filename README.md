@@ -44,8 +44,8 @@ npm start
 ## 사용 라이브러리
 
 - React-router-dom
-- SCSS
-- React-Icons
+- SCSS, React-Icons
+- Axios
 
   <br />
 
@@ -58,16 +58,18 @@ npm start
  ┃ ┣ 📜AuthForm.scss
  ┃ ┗ 📜AuthForm.tsx
  ┣ 📂Todo
- ┃ ┣ 📂components
- ┃ ┃ ┣ 📜Todo.scss
- ┃ ┃ ┣ 📜Todo.tsx
- ┃ ┃ ┣ 📜TodoInput.tsx
- ┃ ┃ ┗ 📜TodoUpdate.tsx
- ┃ ┗ 📜TodoList.tsx
+ ┃ ┣ 📜Item.tsx
+ ┃ ┣ 📜Todo.scss
+ ┃ ┣ 📜TodoInput.tsx
+ ┃ ┣ 📜TodoList.tsx
+ ┃ ┣ 📜TodoStore.tsx
+ ┃ ┗ 📜TodoUpdate.tsx
  ┣ 📂api
+ ┃ ┣ 📜TodoService.ts
  ┃ ┣ 📜api.ts
- ┃ ┣ 📜todo.ts
  ┃ ┗ 📜user.ts
+ ┣ 📂hooks
+ ┃ ┗ 📜useRedirectToMain.ts
  ┣ 📂models
  ┃ ┗ 📜TodoItem.ts
  ┣ 📂styles
@@ -82,8 +84,6 @@ npm start
 <br />
 
 # 주요 기능
-
-주요 기능의 코드 설명을 추가 하다보니 Todo폴더 내부 구조가 문제가 있음을 인지했습니다. 추후 개선할 에정입니다. 또한 axios 라이브러리에 interceptor 기능이 있다는걸 다른 개발자의 코드를 통해 확인했습니다. 해당 부분 사용해 볼 예정입니다.
 
 ## 로그인 / 회원가입
 
@@ -110,9 +110,7 @@ const isValidInputs: {
 
 ### 로그인 / 회원가입 http 통신
 
-- `authType`에 따라 `authUrl` 할당
-
-- `fetchData` 함수 안의 `postAuth`를 통해 http 통신
+- `isLoginPage`에 따라 `authUrl` 할당
 
 - `access_token`을 받으면 토큰을 로컬스토리지에 저장하며 `/todo`페이지로 이동
 
@@ -121,11 +119,8 @@ const isValidInputs: {
 ```typescript
 const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  const authUrl = authType === 'login' ? URL.LOGIN : URL.SIGNUP;
-  const fetchData = async () => {
-    await postAuth(authUrl, { email, password }, navigate);
-  };
-  fetchData();
+  const authUrl = isLoginPage ? URLS.LOGIN : URLS.SIGNUP;
+  await postAuth(authUrl, { email, password }, navigate);
 };
 ```
 
@@ -207,18 +202,17 @@ http.interceptors.request.use(req => {
 <br />
 
 ```typescript
-// @ /Todo/TodoList.tsx
+// @ /Todo/TodoStore.tsx
 const appendTodo = useCallback(
-  (e: React.FormEvent<HTMLFormElement>) => {
+  async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    todoInputRef.current!.focus();
+    if (todoInputRef.current !== null) {
+      todoInputRef.current.focus();
+    }
     if (todoInput === '') return;
 
-    const fetchData = async () => {
-      const data = await postTodo({ todo: todoInput });
-      setTodoList(prev => [...prev, data]);
-    };
-    fetchData();
+    const data = await TodoService.post({ todo: todoInput });
+    setTodoList(prev => [...prev, data]);
     setTodoInput('');
   },
   [todoInputRef, todoInput]
@@ -226,8 +220,8 @@ const appendTodo = useCallback(
 ```
 
 ```typescript
-// @ /api/todo.ts
-export async function postTodo(bodyData: { todo: string }) {
+// @ /api/TodoService.ts
+post: async function (bodyData: { todo: string }) {
   try {
     const res = await http.post('/todos', bodyData);
     if (res.status === 201) return res.data;
@@ -236,7 +230,7 @@ export async function postTodo(bodyData: { todo: string }) {
   } catch (error: any) {
     console.error(error.message);
   }
-}
+},
 ```
 
 <br />
@@ -244,23 +238,22 @@ export async function postTodo(bodyData: { todo: string }) {
 ### Read
 
 ```typescript
-// @ /Todo/TodoList.tsx
+// @ /Todo/TodoStore.tsx
+const getTodoList = useCallback(async () => {
+  const data = await TodoService.get();
+  setTodoList([...data]);
+}, []);
+
 useEffect(() => {
-  if (token) {
-    const fetchData = async () => {
-      const data = await getTodoList();
-      setTodoList([...data]);
-    };
-    fetchData();
-  } else {
-    navigate('/');
-  }
-}, [token, navigate]);
+  getTodoList();
+}, [getTodoList]);
+
+useRedirectToMain(token, navigate);
 ```
 
 ```typescript
-// @ /api/todo.ts
-export async function getTodoList() {
+// @ /api/TodoService.ts
+get: async function () {
   try {
     const res = await http.get('/todos');
     if (res.status === 200) return res.data;
@@ -269,7 +262,7 @@ export async function getTodoList() {
   } catch (error: any) {
     console.error(error.message);
   }
-}
+},
 ```
 
 <br />
@@ -277,23 +270,24 @@ export async function getTodoList() {
 ### Update
 
 ```typescript
-// @ /Todo/components/TodoUpdate.tsx
-const updateTodo = (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  const fetchData = async () => {
+// @ /Todo/TodoUpdate.tsx
+const updateTodo = useCallback(
+  async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const { id, todo, isCompleted } = updateTodoInfo;
-    const data = await putTodo({ id, todo, isCompleted });
+    const data = await TodoService.put({ id, todo, isCompleted });
     const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
+
     setTodoList([...newTodoList]);
-  };
-  fetchData();
-  setIsClickedUpdate(false);
-};
+    setIsClickedUpdate(false);
+  },
+  [updateTodoInfo, todoList, setTodoList, setIsClickedUpdate]
+);
 ```
 
 ```typescript
-// @ /api/todo.ts
-export async function putTodo(bodyData: { id: number; todo: string; isCompleted: boolean }) {
+// @ /api/TodoService.ts
+put: async function (bodyData: { id: number; todo: string; isCompleted: boolean }) {
   try {
     const res = await http.put(`todos/${bodyData?.id}`, bodyData);
     if (res.status === 200) return res.data;
@@ -302,7 +296,7 @@ export async function putTodo(bodyData: { id: number; todo: string; isCompleted:
   } catch (error: any) {
     console.error(error.message);
   }
-}
+},
 ```
 
 <br />
@@ -310,22 +304,19 @@ export async function putTodo(bodyData: { id: number; todo: string; isCompleted:
 ### Delete
 
 ```typescript
-// @ /Todo/components/Todo.tsx
-const handleDeleteTodo = () => {
-  const fetchData = async () => {
-    await deleteTodo({ id: todoItem.id });
-    const newTodoList = todoList.filter(x => x.id !== todoItem.id);
-    setTodoList([...newTodoList]);
-  };
+// @ /Todo/Item.tsx
+const handleDeleteTodo = useCallback(async () => {
+  await TodoService.delete({ id: todoItem.id });
+  const newTodoList = todoList.filter(x => x.id !== todoItem.id);
+  setTodoList([...newTodoList]);
 
-  fetchData();
   setIsClickedDelete(false);
-};
+}, [todoItem, todoList, setTodoList]);
 ```
 
 ```typescript
-// @ /api/todo.ts
-export async function deleteTodo(bodyData: { id: number }) {
+// @ /api/TodoService.ts
+delete: async function (bodyData: { id: number }) {
   try {
     const res = await http.delete(`/todos/${bodyData?.id}`);
     if (res.status === 204) return res.data;
@@ -334,7 +325,7 @@ export async function deleteTodo(bodyData: { id: number }) {
   } catch (error: any) {
     console.error(error.message);
   }
-}
+},
 ```
 
 <br />
@@ -362,9 +353,10 @@ export async function deleteTodo(bodyData: { id: number }) {
 
   <br />
 
+## Context API 적용 과정
+
 ## 향후 로드맵
 
-- src/Todo 이하의 폴더 구조 변경
 - Redux 라이브러리 적용
 - useForm Hooks 구현 및 적용
 - useFetch Hooks 연구
