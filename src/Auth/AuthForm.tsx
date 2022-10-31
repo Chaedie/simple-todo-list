@@ -15,11 +15,17 @@ function AuthForm({ isLoginPage }: Props) {
 
   const navigate = useNavigate();
 
-  const authType = useMemo(() => (isLoginPage ? 'login' : 'signup'), [isLoginPage]);
+  const authType = useMemo(
+    () => (isLoginPage ? 'login' : 'signup'),
+    [isLoginPage]
+  );
 
   const isValidEmail = useMemo(() => email.includes('@'), [email]);
   const isValidPassword = useMemo(() => password.length >= 8, [password]);
-  const isSamePassword = useMemo(() => password === passwordAgain, [password, passwordAgain]);
+  const isSamePassword = useMemo(
+    () => password === passwordAgain,
+    [password, passwordAgain]
+  );
 
   const isValidInputs: {
     [key: string]: boolean;
@@ -43,7 +49,13 @@ function AuthForm({ isLoginPage }: Props) {
 
   return (
     <form className="AuthForm" onSubmit={handleSubmitAuth}>
-      <input type="email" name="email" placeholder="ID" value={email} onChange={e => setEmail(e.target.value)} />
+      <input
+        type="email"
+        name="email"
+        placeholder="ID"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
       <br />
       <input
         minLength={8}
@@ -66,7 +78,11 @@ function AuthForm({ isLoginPage }: Props) {
           <br />
         </>
       )}
-      <input type="submit" value={authType} disabled={!isValidInputs[authType]} />
+      <input
+        type="submit"
+        value={authType}
+        disabled={!isValidInputs[authType]}
+      />
     </form>
   );
 }

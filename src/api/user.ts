@@ -5,7 +5,11 @@ interface authInputs {
   password: string;
 }
 
-export async function postAuth(authUrl: string, { email, password }: authInputs, navigate: Function) {
+export async function postAuth(
+  authUrl: string,
+  { email, password }: authInputs,
+  navigate: Function
+) {
   try {
     const res = await http.post(authUrl, { email, password });
     if (res.data.access_token) {

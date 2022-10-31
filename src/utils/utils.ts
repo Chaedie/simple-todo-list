@@ -16,6 +16,5 @@ export const request = async (uri: string, options = {}) => {
   }
 };
 
-export {};
-
-export const toggleState = (setState: Dispatch<SetStateAction<boolean>>) => setState(prev => !prev);
+export const toggleState = (setState: Dispatch<SetStateAction<boolean>>) =>
+  setState(prev => !prev);

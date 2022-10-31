@@ -16,7 +16,11 @@ function Item({ todoItem }: Props) {
   const { id, todo, isCompleted } = todoItem;
   const [isClickedUpdate, setIsClickedUpdate] = useState(false);
   const [isClickedDelete, setIsClickedDelete] = useState(false);
-  const [updateTodoInfo, setUpdateTodoInfo] = useState({ id, todo, isCompleted });
+  const [updateTodoInfo, setUpdateTodoInfo] = useState({
+    id,
+    todo,
+    isCompleted,
+  });
 
   const handleDeleteTodo = useCallback(async () => {
     await TodoService.delete({ id: todoItem.id });
@@ -28,8 +32,12 @@ function Item({ todoItem }: Props) {
 
   return (
     <div className="Todo mg-0_5rem">
-      <span>{todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}</span>
-      <span className={todoItem.isCompleted ? 'completed' : ''}>할일: {todoItem.todo}</span>
+      <span>
+        {todoItem.isCompleted ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
+      </span>
+      <span className={todoItem.isCompleted ? 'completed' : ''}>
+        할일: {todoItem.todo}
+      </span>
       <div className="buttons">
         <button onClick={() => toggleState(setIsClickedUpdate)}>수정</button>
         <button onClick={() => toggleState(setIsClickedDelete)}>삭제</button>

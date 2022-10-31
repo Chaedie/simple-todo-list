@@ -12,8 +12,18 @@ function Auth() {
       </header>
       <main className="authContainer">
         <h2>{authType}</h2>
-        <input className="mg-0_5rem" type="button" value="Login!" onClick={() => setIsLoginPage(true)} />
-        <input className="mg-0_5rem" type="button" value="signup!" onClick={() => setIsLoginPage(false)} />
+        <input
+          className="mg-0_5rem"
+          type="button"
+          value="Login!"
+          onClick={() => setIsLoginPage(true)}
+        />
+        <input
+          className="mg-0_5rem"
+          type="button"
+          value="signup!"
+          onClick={() => setIsLoginPage(false)}
+        />
         <AuthForm isLoginPage={isLoginPage} />
       </main>
     </div>

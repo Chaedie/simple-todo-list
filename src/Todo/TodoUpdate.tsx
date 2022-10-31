@@ -10,7 +10,11 @@ interface Props {
   setIsClickedUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function TodoUpdate({ updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }: Props) {
+function TodoUpdate({
+  updateTodoInfo,
+  setUpdateTodoInfo,
+  setIsClickedUpdate,
+}: Props) {
   const { todoList, setTodoList } = useContext(TodoContext)!;
   const handleChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {
     const isCompleted = e.target.value === 'true' ? true : false;
@@ -22,7 +26,9 @@ function TodoUpdate({ updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }: P
       e.preventDefault();
       const { id, todo, isCompleted } = updateTodoInfo;
       const data = await TodoService.put({ id, todo, isCompleted });
-      const newTodoList = todoList.map((todoItem: TodoItem) => (todoItem.id === data.id ? data : todoItem));
+      const newTodoList = todoList.map((todoItem: TodoItem) =>
+        todoItem.id === data.id ? data : todoItem
+      );
 
       setTodoList([...newTodoList]);
       setIsClickedUpdate(false);
@@ -36,16 +42,28 @@ function TodoUpdate({ updateTodoInfo, setUpdateTodoInfo, setIsClickedUpdate }: P
         <input
           type="text"
           placeholder="할일"
-          onChange={e => setUpdateTodoInfo(prev => ({ ...prev, todo: e.target.value }))}
+          onChange={e =>
+            setUpdateTodoInfo(prev => ({ ...prev, todo: e.target.value }))
+          }
           value={updateTodoInfo.todo}
         />
         <br />
         <label>
-          <input type="radio" onChange={handleChangeRadio} checked={updateTodoInfo.isCompleted} value="true" />
+          <input
+            type="radio"
+            onChange={handleChangeRadio}
+            checked={updateTodoInfo.isCompleted}
+            value="true"
+          />
           완료
         </label>
         <label>
-          <input type="radio" onChange={handleChangeRadio} checked={!updateTodoInfo.isCompleted} value="false" />
+          <input
+            type="radio"
+            onChange={handleChangeRadio}
+            checked={!updateTodoInfo.isCompleted}
+            value="false"
+          />
           미완료
         </label>
         <input type="submit" value="수정!!" />

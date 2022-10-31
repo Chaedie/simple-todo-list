@@ -9,6 +9,7 @@ const TodoService = {
       throw new Error('API통신 실패');
     } catch (error: any) {
       console.error(error.message);
+      throw new Error();
     }
   },
 
@@ -20,10 +21,15 @@ const TodoService = {
       throw new Error('API통신 실패');
     } catch (error: any) {
       console.error(error.message);
+      throw new Error();
     }
   },
 
-  put: async function (bodyData: { id: number; todo: string; isCompleted: boolean }) {
+  put: async function (bodyData: {
+    id: number;
+    todo: string;
+    isCompleted: boolean;
+  }) {
     try {
       const res = await http.put(`todos/${bodyData?.id}`, bodyData);
       if (res.status === 200) return res.data;
@@ -31,6 +37,7 @@ const TodoService = {
       throw new Error('API통신 실패');
     } catch (error: any) {
       console.error(error.message);
+      throw new Error();
     }
   },
 
@@ -42,6 +49,7 @@ const TodoService = {
       throw new Error('API통신 실패');
     } catch (error: any) {
       console.error(error.message);
+      throw new Error();
     }
   },
 };
