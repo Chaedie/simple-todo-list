@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { AuthService } from 'src/apis/AuthService';
 import useAutoLogin from 'src/hooks/useAutoLogin';
-import useForm from '../../hooks/useForm';
+import useForm from 'src/hooks/useForm';
 
 interface Props {
   isSignIn: boolean;
@@ -14,6 +14,7 @@ function AuthForm({ isSignIn }: Props) {
   const { inputs, handleChangeInputs, isValid } = useForm(isSignIn);
   const { email, password, passwordConfirm } = inputs;
   const navigate = useAutoLogin();
+  const isEmpty = email.length > 0 && password.length > 0;
 
   const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,6 +36,8 @@ function AuthForm({ isSignIn }: Props) {
           value={email}
           onChange={handleChangeInputs}
           autoComplete="true"
+          error={!isValid && !isEmpty}
+          helperText={!isValid && !isEmpty && 'email 형식에 맞게입력해주세요.'}
         />
         <Box m={1} />
         <TextField
@@ -45,6 +48,8 @@ function AuthForm({ isSignIn }: Props) {
           value={password}
           onChange={handleChangeInputs}
           autoComplete="true"
+          error={!isValid && !isEmpty}
+          helperText={!isValid && !isEmpty && '8자리 이상으로 입력해주세요.'}
         />
         <Box m={1} />
         {!isSignIn && (
@@ -59,7 +64,7 @@ function AuthForm({ isSignIn }: Props) {
           />
         )}
         <Box m={1} />
-        <Button variant="outlined" type="submit">
+        <Button variant="outlined" type="submit" disabled={!isValid}>
           제출
         </Button>
         <Box m={1} />

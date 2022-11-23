@@ -7,6 +7,8 @@ function Header() {
   const location = useLocation();
   if (location.pathname === '/') {
     pageName = 'Auth Page';
+  } else if (location.pathname === '/todo') {
+    pageName = 'Todo Page';
   }
 
   return (

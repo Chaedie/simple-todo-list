@@ -14,6 +14,7 @@ function useForm(isLoginPage: boolean) {
 
   const { email, password, passwordConfirm } = inputs;
 
+  // TODO: 밸리데이션 후 Error 케이스에 맞게 helper Text 생성하기
   const isValid = () => {
     const isValidLogin = email.includes('@') && password.length >= 8;
     const isValidSignin = isValidLogin && password === passwordConfirm;
