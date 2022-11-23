@@ -1,9 +1,10 @@
-import './AuthForm.scss';
 import { useCallback, useMemo } from 'react';
 import { URLS } from '../api/api';
 import { postAuth } from '../api/user';
 import useForm from '../hooks/useForm';
 import useAutoLogin from '../hooks/useAutoLogin';
+import { Button, Input } from '@mui/material';
+import { Stack } from '@mui/system';
 
 interface Props {
   isLoginPage: boolean;
@@ -24,42 +25,46 @@ function AuthForm({ isLoginPage }: Props) {
   );
 
   return (
-    <form className="AuthForm" onSubmit={handleSubmitAuth}>
-      <input
-        type="email"
-        name="email"
-        placeholder="ID"
-        value={email}
-        onChange={handleChangeInputs}
-      />
-      <br />
-      <input
-        minLength={8}
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={password}
-        onChange={handleChangeInputs}
-      />
-      <br />
-      {!isLoginPage && (
-        <>
-          <input
-            minLength={8}
+    <form onSubmit={handleSubmitAuth}>
+      <Stack>
+        <br />
+        <Input
+          type="email"
+          placeholder="ID"
+          value={email}
+          onChange={handleChangeInputs}
+          name="email"
+        />
+        <br />
+        <Input
+          minRows={8}
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={password}
+          onChange={handleChangeInputs}
+        />
+        <br />
+        {!isLoginPage && (
+          <Input
+            minRows={8}
             type="password"
             name="passwordConfirm"
             placeholder="Password"
             value={passwordConfirm}
             onChange={handleChangeInputs}
           />
-          <br />
-        </>
-      )}
-      <input
-        type="submit"
-        value={isLoginPage ? 'LOGIN' : 'SIGNUP'}
-        disabled={!isValid}
-      />
+        )}
+        <br />
+        <Button
+          type="submit"
+          variant="contained"
+          value={isLoginPage ? 'LOGIN' : 'SIGNUP'}
+          disabled={!isValid}
+        >
+          {isLoginPage ? 'LOGIN' : 'SIGNUP'}
+        </Button>
+      </Stack>
     </form>
   );
 }

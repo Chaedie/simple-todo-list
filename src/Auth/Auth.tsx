@@ -1,3 +1,5 @@
+import { Button, Container, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import { useState } from 'react';
 import AuthForm from './AuthForm';
 
@@ -6,27 +8,22 @@ function Auth() {
   const authType = isLoginPage ? 'LOGIN' : 'SIGNUP';
 
   return (
-    <div className="Auth modal">
-      <header>
-        <h1 className="mg-0_5rem">Auth Page</h1>
-      </header>
-      <main className="authContainer">
-        <h2>{authType}</h2>
-        <input
-          className="mg-0_5rem"
-          type="button"
-          value="Login!"
-          onClick={() => setIsLoginPage(true)}
-        />
-        <input
-          className="mg-0_5rem"
-          type="button"
-          value="signup!"
-          onClick={() => setIsLoginPage(false)}
-        />
+    <Container fixed>
+      <Box component="main">
+        {/* <Box className="authContainer" component="main"> */}
+        <Box component="header">
+          <Typography variant="h5">{authType} Page</Typography>
+        </Box>
+        <Button variant="contained" onClick={() => setIsLoginPage(true)}>
+          Login!
+        </Button>
+        <Button variant="contained" onClick={() => setIsLoginPage(false)}>
+          SignUp!
+        </Button>
+
         <AuthForm isLoginPage={isLoginPage} />
-      </main>
-    </div>
+      </Box>
+    </Container>
   );
 }
 
