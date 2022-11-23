@@ -1,7 +1,13 @@
+import { CssBaseline } from '@mui/material';
 import Router from './Router';
 
 function App() {
-  return <Router />;
+  return (
+    <>
+      <CssBaseline />
+      <Router />
+    </>
+  );
 }
 
 export default App;
