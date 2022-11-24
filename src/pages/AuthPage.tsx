@@ -5,7 +5,6 @@ import Layout from 'src/components/Layout/Layout';
 
 function AuthPage() {
   const [isSignIn, setIsSignIn] = useState(true);
-  // const auth = AuthService;
 
   return (
     <Layout>
