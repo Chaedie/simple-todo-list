@@ -11,10 +11,10 @@ interface Props {
 const authService = new AuthService();
 
 function AuthForm({ isSignIn }: Props) {
-  const { inputs, handleChangeInputs, isValid } = useForm(isSignIn);
+  const { inputs, handleChangeInputs, hasError, helperTexts } =
+    useForm(isSignIn);
   const { email, password, passwordConfirm } = inputs;
   const navigate = useAutoLogin();
-  const isEmpty = email.length > 0 && password.length > 0;
 
   const handleSubmitAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,8 +36,8 @@ function AuthForm({ isSignIn }: Props) {
           value={email}
           onChange={handleChangeInputs}
           autoComplete="true"
-          error={!isValid && !isEmpty}
-          helperText={!isValid && !isEmpty && 'email 형식에 맞게입력해주세요.'}
+          error={hasError.email}
+          helperText={helperTexts.email}
         />
         <Box m={1} />
         <TextField
@@ -48,8 +48,8 @@ function AuthForm({ isSignIn }: Props) {
           value={password}
           onChange={handleChangeInputs}
           autoComplete="true"
-          error={!isValid && !isEmpty}
-          helperText={!isValid && !isEmpty && '8자리 이상으로 입력해주세요.'}
+          error={hasError.password}
+          helperText={helperTexts.password}
         />
         <Box m={1} />
         {!isSignIn && (
@@ -61,10 +61,12 @@ function AuthForm({ isSignIn }: Props) {
             value={passwordConfirm}
             onChange={handleChangeInputs}
             autoComplete="true"
+            error={hasError.passwordConfirm}
+            helperText={helperTexts.passwordConfirm}
           />
         )}
         <Box m={1} />
-        <Button variant="outlined" type="submit" disabled={!isValid}>
+        <Button variant="outlined" type="submit" disabled={!hasError.inputs}>
           제출
         </Button>
         <Box m={1} />
