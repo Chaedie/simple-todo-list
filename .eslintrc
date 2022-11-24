@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["build", "dist", "public"], // build 폴더 무시
   "extends": ["react-app", "plugin:prettier/recommended"],
   "rules": {
     "no-var": "warn", // var 금지
