@@ -10,6 +10,7 @@ function TodoInput() {
     e.preventDefault();
     const data = await TodoService.createTodo(todo);
     setTodoList(prev => [...prev, data]);
+    setTodo('');
   };
 
   return (
