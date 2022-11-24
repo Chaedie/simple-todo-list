@@ -27,7 +27,7 @@ export const TodoService = {
 
   async updateTodo(id: number, todo: string, isCompleted: boolean) {
     try {
-      const url = URLS.todos + id;
+      const url = `${URLS.todos}/${id}`;
       const res = await http.put(url, { id, todo, isCompleted });
       if (res.status === 200) return res.data;
 
@@ -40,7 +40,7 @@ export const TodoService = {
 
   async deleteTodo(id: number) {
     try {
-      const url = URLS.todos + id;
+      const url = `${URLS.todos}/${id}`;
       const res = await http.delete(url);
       if (res.status === 204) return res.data;
 

@@ -19,7 +19,7 @@ function TodoList() {
   }
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" width="30rem">
       {todoList.map(todoItem => (
         <List sx={style} key={todoItem.id} aria-label="basic-list">
           <TodoItem todoItem={todoItem} />
