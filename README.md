@@ -2,7 +2,10 @@
 
 간단한 To Do List App 입니다.
 
-[사진, 움짤 자리]
+![투두-로그인](https://user-images.githubusercontent.com/88099590/203834354-351b3941-a260-44d9-8187-367b2245bc18.gif)
+
+![투두-CRUD](https://user-images.githubusercontent.com/88099590/203834370-68fd5cb3-c250-490a-ade9-cf66d8414836.gif)
+
 
 <br />
 
@@ -81,15 +84,3 @@
 - [Fetch => Axios 적용](https://chaedies-dev-log.tistory.com/entry/Reactjs-to-do-app-fetch-Axios-%EB%A7%88%EC%9D%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%85%98-%EA%B3%BC%EC%A0%95)
 
   <br />
-
-## Context API 적용 과정2
-
-## MUI 적용 과정
-
-## 향후 로드맵
-
-- Redux 라이브러리 적용
-
-  <br />
-
-# 주요 코드
